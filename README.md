@@ -1,1 +1,3 @@
 # GymMate
+
+`npm run dev`
