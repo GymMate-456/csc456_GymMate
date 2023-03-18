@@ -1,0 +1,41 @@
+#basic code
+
+#html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Registration</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>User Registration</h1>
+    <form>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <button type="submit">Sign Up</button>
+    </form>
+    <script src="script.js"></script>
+  </body>
+</html>
+
+#js
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+app.post('/signup', (req, res) => {
+  const { name, email, password } = req.body;
+  // Save user data to a database or file
+  res.send('User successfully registered!');
+});
+
+app.listen(3000, () => {
+  console.log('Server started on port 3000');
+});
