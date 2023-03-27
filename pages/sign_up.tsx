@@ -2,37 +2,30 @@ import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import tempLogo from "./../public/icons/temp_logo2.png";
 import Image from 'next/image';
+import { emailExists, validatePassword, createNewUser } from '../utils/users'
 
-function Signup() {
+export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit =  async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (validateForm()) {
-      // handle signup logic here
+    if (await validateForm(email, password)) {
+      console.log("Creating New User");
+      await createNewUser(email, password);
     }
   };
 
-  const validateForm = () => {
-    let valid = true;
+  const validateForm = async (email: String, password: String) => {
     setPasswordError('');
     setConfirmPasswordError('');
-
-    if (password.length < 6 || !password.match(/^(?=.*\d)(?=.*[A-Z])/)) {
-      setPasswordError('Password must be at least 6 characters long and include an uppercase letter and a number');
-      valid = false;
+    if (!await emailExists(email)) {
+      return validatePassword(password, setPasswordError, confirmPassword, setConfirmPasswordError);
     }
-
-    if (confirmPassword !== password) {
-      setConfirmPasswordError('Passwords do not match');
-      valid = false;
-    }
-
-    return valid;
+    return false;
   };
 
   return (
@@ -71,5 +64,3 @@ function Signup() {
     </div>
   );
 }
-
-export default Signup;
