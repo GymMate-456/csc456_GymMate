@@ -12,8 +12,8 @@ function Signin() {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-    .then((userCredentials) => {
-      console.log("User successfully logged in with: ", userCredentials)
+    .then((userInfo) => {
+      console.log("User successfully logged in!")
     })
     .catch((error) => {
       console.log(error)
