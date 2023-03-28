@@ -2,6 +2,8 @@ import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
 import tempLogo from "./../public/icons/temp_logo2.png";
+import { auth } from "../utils/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Signin() {
   const [email, setEmail] = useState('');
@@ -9,7 +11,13 @@ function Signin() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // handle signin logic here
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userInfo) => {
+      console.log("User successfully logged in!")
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   return (
