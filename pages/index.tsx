@@ -1,13 +1,17 @@
-import styles from '../styles/Home.module.css'
-import Signin from './sign_in'
-import Signup from './sign_up'
+// import styles from "../styles/Home.module.css";
+import Signin from "./signin";
+import Signup from "./signup";
 import React, { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import Link from "next/link";
+import styles from "../styles/Signin.module.css";
+import tempLogo from "../public/icons/temp_logo2.png";
+import Image from "next/image";
 
 export default function Home() {
   //variable to help keep track if user is signed in or not
-  const[currentUser, setCurrentUser] = useState<any | null>(null);
+  const [currentUser, setCurrentUser] = useState<any | null>(null);
 
   //function to sign the user out (if signed in)
   const signOutUser = () => {
@@ -21,14 +25,14 @@ export default function Home() {
   //useEffect to check if user is signed in or not
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser){
+      if (currentUser) {
         setCurrentUser(currentUser);
       } else {
         setCurrentUser(null);
       }
     });
     return () => {
-      listen()
+      listen();
     };
   }, []);
 
@@ -39,14 +43,25 @@ export default function Home() {
       {currentUser ? (
         <>
           <p>{`Signed in as ${currentUser.email}`}</p>
+          <p>This is where we can have our main components for tha app</p>
           <button onClick={signOutUser}>Sign Out</button>
         </>
       ) : (
-        <>
-          <Signin></Signin>
-        </>
+        <div className={styles.container}>
+          <div className={styles.card}>
+            <div className={styles.image_container}>
+              <Image src={tempLogo} alt="Image" className={styles.logo} />
+            </div>
+            <Link href="/signin">
+              <button className={styles.button}>Sign In</button>
+            </Link>
+            <Link href="/signup">
+              <button className={styles.button}>Sign Up</button>
+            </Link>
+            <br></br>
+          </div>
+        </div>
       )}
-      
     </div>
-  )
+  );
 }
