@@ -2,24 +2,37 @@ import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import Image from "next/image";
 import tempLogo from "../../public/icons/temp_logo2.png";
-import { auth } from "../../utils/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { loginUser, checkNewUserFlag } from '../../utils/users'
 import Link from "next/link";
+import { useRouter } from 'next/router';
 
-function Signin() {
+export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userInfo) => {
-        console.log("User successfully logged in!");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+    // User login authentication
+    const uid = await loginUser(email, password);
+    // If succesful user login
+    if (uid != 'error') {
+      // if new user flag enabled
+      if (await checkNewUserFlag(uid)) {
+        // Routes to account initalization
+        router.push({
+          pathname: '/account_wizard_1',
+          query: { uid: uid },
+        });
+      } else {
+        // Routes back to home
+        router.push({
+          pathname: '/',
+          query: { uid: uid },
+        });
+      }
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -62,5 +75,3 @@ function Signin() {
     </div>
   );
 }
-
-export default Signin;

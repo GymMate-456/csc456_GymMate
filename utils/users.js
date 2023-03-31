@@ -42,25 +42,62 @@ const emailExists = async (email) => {
 }
 
 // If email & password is acceptable creates a new user
-// Inputs: String Email & Password | Outputs: Success Boolean
+// Inputs: String Email & Password | Outputs: String UID
 const createNewUser = async (email, password) => {
   // Auth creates new user
-  auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
+  console.log('Starting process to create new user');
+  return auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
     // Saves user into users database for record keeping
-    database.collection("users").doc(credentials.user.uid).set({
-      email: email, password: password
+    return database.collection('users').doc(credentials.user.uid).set({
+      email: email, password: password, newUserFlag: true,
     }).then(() => {
-        console.log('New User Succesfully Created');
-        return true;
+        console.log('Completed process to create new user succesfully');
+        return credentials.user.uid;
     }).catch((error) => {
-        console.error("User Data Save Failed: ", error);
-        return false;
+      console.error('Failed process to save new user data');
+      console.error(error.code);
+      console.error(error.message);
+      return 'error';
     });
   }).catch((error) => {
-    console.log(error.code);
-    console.log(error.message);
-    return false;
+    console.error('Failed process to create new user');
+    console.error(error.code);
+    console.error(error.message);
+    return 'error';
   });
 }
 
-export { getUsers, emailExists, validatePassword, createNewUser };
+// Checks particular user id to see if its a new user
+// Inputs: String UID | Outputs: Boolean Flag
+const checkNewUserFlag = async (uid) => {
+  return database.collection('users').doc(uid).get().then((user) => {
+    if (user.exists) {
+      return user.data()['newUserFlag'];
+    } else {
+        console.error('Error: User does not exist!');
+        return 'error';
+    }
+  }).catch((error) => {
+    console.error('Failed to check new user flag');
+    console.error(error.code);
+    console.error(error.message);
+    return 'error';
+  });
+}
+
+// Authenticates email & password and logins in user
+// Inputs: String Email & Password | Outputs: String UID
+const loginUser = async (email, password) => {
+  console.log('Attempting user authentication');
+  return auth.signInWithEmailAndPassword(email, password).then((credentials) => {
+      console.log('User login succesful!')
+      return credentials.user.uid;
+    }).catch((error) => {
+      console.error('User login failed');
+      console.error(error.code);
+      console.error(error.message);
+      return 'error';
+    })
+}
+
+export { getUsers, emailExists, validatePassword, createNewUser, checkNewUserFlag, loginUser };
