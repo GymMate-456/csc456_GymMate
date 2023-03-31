@@ -2,15 +2,27 @@ import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
 import tempLogo from "./../public/icons/temp_logo2.png";
+import { database } from "../utils/firebase";
+import { useRouter } from 'next/router';
 
 function Wizard1() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [gender, setGender] = useState('');
+  const router = useRouter();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // handle signin logic here
+
+    database.collection('users').doc(router.query['uid']?.toString()).update({
+      firstName: firstName, lastName: lastName, gender: gender
+    })
+
+    router.push({
+      pathname: '/account_wizard_2',
+      query: { uid: router.query['uid']?.toString() },
+    });
   }
 
   return (
