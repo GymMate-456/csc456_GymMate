@@ -5,7 +5,8 @@ import Signup from './sign_up'
 export default function Home() {
   return (
     <div>
-      <Signin></Signin>
+      {/* <Signin></Signin> */}
+      <Wizard1></Wizard1>
     </div>
   )
 }
