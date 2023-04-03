@@ -8,6 +8,7 @@ import {
   createNewUser,
 } from "../../utils/users";
 import Link from "next/link";
+import { useRouter } from 'next/router';
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -15,12 +16,21 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Validate email & password
     if (await validateForm(email, password)) {
-      console.log("Creating New User");
-      await createNewUser(email, password);
+      // Create user authentication & register in database
+      const uid = await createNewUser(email, password);
+      if (uid != 'error') {
+        // New users are pushed to account initalization
+        router.push({
+          pathname: '/account_wizard_1',
+          query: { uid: uid },
+        });
+      } 
     }
   };
 
