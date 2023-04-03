@@ -2,15 +2,40 @@ import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
 import tempLogo from "./../public/icons/temp_logo2.png";
+import Multiselect from 'multiselect-react-dropdown';
 
 function Wizard2() {
   const [age, setAge] = useState('');
   const [location, setLocation] = useState('');
-  const [sportsPreference, setSportsPreference] = useState('');
-
+  const [sportsPreference, setSportsPreference] = useState([]);
+  const sports = [
+    'Football',
+    'Basketball',
+    'Baseball',
+    'Soccer',
+    'Ice Hockey',
+    'Tennis',
+    'Golf',
+    'Wrestling',
+    'Rugby',
+    'Badminton',
+    'Cycling',
+    'Boxing',
+    'Lacrose',
+    'Volleyball',
+    'Cricket',
+    'Swimming',
+    'Track & Field'
+  ]
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // handle signin logic here
+  }
+
+  function console_check() {
+    console.log("Age", age)
+    console.log("Location", location)
+    console.log("Sports: ", sportsPreference);
   }
 
   return (
@@ -23,7 +48,7 @@ function Wizard2() {
         <form onSubmit={handleSubmit}>
           <label className={styles.label}>
             Age:
-            <input className={styles.input} type="text" value={age} onChange={(e) => setAge(e.target.value)} />
+            <input className={styles.input} type="number" value={age} onChange={(e) => setAge(e.target.value)} />
           </label>
           <br />
           <label className={styles.label}>
@@ -33,10 +58,24 @@ function Wizard2() {
           <br />
           <label className={styles.label}>
             Sports Preference:
-            <input className={styles.input} type="text" value={sportsPreference} onChange={(e) => setSportsPreference(e.target.value)} />
+            <Multiselect
+              isObject={false}
+              placeholder=" "
+              onKeyPressFn={function noRefCheck(){}}
+              onRemove={(e) => setSportsPreference(e)}
+              onSearch={function noRefCheck(){}}
+              onSelect={(e) => setSportsPreference(e)}
+              options={sports}
+              className={styles.input}
+              style={{
+                searchBox: {
+                  border: 'none',
+                }
+              }}
+            />
           </label>
           <br />
-          <button className={styles.button} type="submit">Continue</button>
+          <button className={styles.button} type="submit" onClick={console_check}>Continue</button>
         </form>
         <br></br>
       </div>

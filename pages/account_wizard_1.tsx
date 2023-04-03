@@ -33,7 +33,19 @@ function Wizard1() {
           <br />
           <label className={styles.label}>
             Gender:
-            <input className={styles.input} type="text" value={gender} onChange={(e) => setGender(e.target.value)} />
+            {/* <input className={styles.input} type="text" value={gender} onChange={(e) => setGender(e.target.value)} /> */}
+            <select
+              className={styles.input}
+              value={gender}
+              onChange={(e) => {  
+              setGender(e.target.value);
+                }}
+            >
+              <option value=" "></option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
           </label>
           <br />
           <button className={styles.button} type="submit">Continue</button>
