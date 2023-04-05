@@ -29,7 +29,7 @@ function Wizard2() {
     alert('An error occurred while submitting the form.');
 
     // Log the error to the console for debugging purposes
-    console.error('An error occurred while submitting the form:', error);
+    console.error('Failed process to save new user data.', error);
   }
 }
 
