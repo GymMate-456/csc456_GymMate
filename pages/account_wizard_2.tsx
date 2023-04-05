@@ -26,7 +26,7 @@ function Wizard2() {
     });
   } catch (error) {
     // error message to the user
-    alert('An error occurred while submitting the form.');
+    alert('An error occurred while creating a new user.');
 
     // Log the error to the console for debugging purposes
     console.error('Failed process to save new user data.', error);
