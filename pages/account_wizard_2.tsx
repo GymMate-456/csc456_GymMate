@@ -14,14 +14,25 @@ function Wizard2() {
   const handleSubmit =async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // handle signin logic here
-    database.collection('users').doc(router.query['uid']?.toString()).update({
+
+  try {
+    await database.collection('users').doc(router.query['uid']?.toString()).update({
       age: age, location: location, sportsPreference: sportsPreference
-    })
+    });
+
     router.push({
       pathname: '/',
       query: { uid: router.query['uid']?.toString() },
     });
+  } catch (error) {
+    // error message to the user
+    alert('An error occurred while submitting the form.');
+
+    // Log the error to the console for debugging purposes
+    console.error('An error occurred while submitting the form:', error);
   }
+}
+
 
   return (
     <div className={styles.container}>
