@@ -10,7 +10,7 @@ function Wizard1() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // handle signin logic here
+    // handle wizard1 input submit logic here
   }
 
   return (

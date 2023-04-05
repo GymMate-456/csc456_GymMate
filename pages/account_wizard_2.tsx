@@ -3,10 +3,14 @@ import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
 import tempLogo from "./../public/icons/temp_logo2.png";
 import Multiselect from 'multiselect-react-dropdown';
+import dynamic from 'next/dynamic';
+
+const LocationAutocomplete = dynamic(() => import('../utils/LocationAutocomplete'), {
+  ssr: false, // Disable server-side rendering
+});
 
 function Wizard2() {
   const [age, setAge] = useState('');
-  const [location, setLocation] = useState('');
   const [sportsPreference, setSportsPreference] = useState([]);
   const sports = [
     'Football',
@@ -27,14 +31,21 @@ function Wizard2() {
     'Swimming',
     'Track & Field'
   ]
+
+  const [location, setLocation] = useState<google.maps.places.PlaceResult | null>(null);
+
+  const handlePlaceSelect = (place: google.maps.places.PlaceResult) => {
+    setLocation(place);
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // handle signin logic here
+    // handle wizard2 input submit logic here
   }
 
   function console_check() {
     console.log("Age", age)
-    console.log("Location", location)
+    console.log("Location", location?.formatted_address)
     console.log("Sports: ", sportsPreference);
   }
 
@@ -53,8 +64,9 @@ function Wizard2() {
           <br />
           <label className={styles.label}>
             Location:
-            <input className={styles.input} type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+            <LocationAutocomplete onSelect={handlePlaceSelect} />
           </label>
+          
           <br />
           <label className={styles.label}>
             Sports Preference:
