@@ -1,6 +1,6 @@
 import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
-import tempLogo from "../../public/icons/temp_logo2.png";
+import logo from "../../public/icons/logo.png";
 import Image from "next/image";
 import {
   emailExists,
@@ -8,7 +8,6 @@ import {
   createNewUser,
 } from "../../utils/users";
 import Link from "next/link";
-import { useRouter } from 'next/router';
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -16,21 +15,12 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Validate email & password
     if (await validateForm(email, password)) {
-      // Create user authentication & register in database
-      const uid = await createNewUser(email, password);
-      if (uid != 'error') {
-        // New users are pushed to account initalization
-        router.push({
-          pathname: '/account_wizard_1',
-          query: { uid: uid },
-        });
-      } 
+      console.log("Creating New User");
+      await createNewUser(email, password);
     }
   };
 
@@ -52,12 +42,12 @@ export default function Signup() {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.image_container}>
-          <Image src={tempLogo} alt="Image" className={styles.logo} />
+          <Image src={logo} alt="Image" className={styles.logo} />
         </div>
         <h1 className={styles.heading}>Create an account</h1>
         <form onSubmit={handleSubmit}>
           <label className={styles.label}>
-            Email:
+            Email
             <input
               className={styles.input}
               type="email"
@@ -67,7 +57,7 @@ export default function Signup() {
           </label>
           <br />
           <label className={styles.label}>
-            Password:
+            Password
             <input
               className={styles.input}
               type="password"
@@ -78,7 +68,7 @@ export default function Signup() {
           <span className={styles.error}>{passwordError}</span>
           <br />
           <label className={styles.label}>
-            Confirm Password:
+            Confirm Password
             <input
               className={styles.input}
               type="password"
@@ -89,12 +79,12 @@ export default function Signup() {
           <span className={styles.error}>{confirmPasswordError}</span>
           <br />
           <button className={styles.button} type="submit">
-            Continue
+            Sign Up
           </button>
         </form>
         <br></br>
         <div className={styles.links}>
-          <Link href="/signin">Already on GymMate?</Link>
+          <Link className={styles.existing} href="/signin">Already on GymMate?</Link>
         </div>
       </div>
     </div>
