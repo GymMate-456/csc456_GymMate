@@ -1,36 +1,26 @@
 // sign_in.test.js
 // @ts-check
-const { chromium } = require('playwright');
 
-describe('Signin', () => {
-  let browser;
-  let page;
+const { test, expect } = require('@playwright/test');
 
-  beforeAll(async () => {
-    browser = await chromium.launch();
-    page = await browser.newPage();
-    await page.goto('http://localhost:3000/signin');
-  afterAll(async () => {
-    await browser.close();
-  });
+test('Signin form submission should navigate to correct page', async ({ page }) => {
+  await page.goto('http://localhost:3000');
 
-  it('should allow user to sign in', async () => {
-    // Fill the form
-    await page.fill('#email-input', 'test@example.com');
-    await page.fill('#password-input', 'password123');
-    await page.click('#signin-button');
+  // Fill in email and password inputs
+  await page.fill('input[type="text"]', 'test@example.com');
+  await page.fill('input[type="password"]', 'testpassword');
 
-    // Wait for the page to navigate to verify the successful signin logic as expected
-    await page.waitForNavigation();
+  // Click on submit button
+  await page.click('button[type="submit"]');
 
-    // Verify the user is signed in
-    const title = await page.title();
-    expect(title).toBe('Welcome Back');
-  });
-  ////test for forgot password
-  //await page.click('#forgotpassword-button');
-  ////test for new here join now
-  //await page.click('#signup-button');
+  // Wait for navigation to complete
+  await page.waitForNavigation();
+
+  // Check if navigation was successful
+  expect(page.url()).toMatch('/account_wizard_1?uid=');
+
+  // Check if query parameters were passed correctly
+  const url = page.url();
+  const query = new URLSearchParams(url.substring(url.indexOf('?')));
+  expect(query.get('uid')).not.toBe(null);
 });
-});
-
