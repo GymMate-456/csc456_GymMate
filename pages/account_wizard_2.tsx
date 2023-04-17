@@ -13,24 +13,21 @@ function Wizard2() {
 
   const handleSubmit =async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // handle signin logic here
-
-  try {
-    await database.collection('users').doc(router.query['uid']?.toString()).update({
-      age: age, location: location, sportsPreference: sportsPreference
+    // finalize account initalization logic 
+    const user = router.query['user']!.toString()
+    await database.collection('users').doc(JSON.parse(user).uid).update({
+      age: age, location: location, sportsPreference: sportsPreference, newUserFlag: false
+    }).then(() => {
+      router.push({
+        pathname: '/',
+        query: { user: user },
+      });
+    }).catch((error) =>  {
+      // error message to the user
+      alert('An error occurred while creating a new user.');
+      // Log the error to the console for debugging purposes
+      console.error('Failed process to save new user data.', error);
     });
-
-    router.push({
-      pathname: '/',
-      query: { uid: router.query['uid']?.toString() },
-    });
-  } catch (error) {
-    // error message to the user
-    alert('An error occurred while creating a new user.');
-
-    // Log the error to the console for debugging purposes
-    console.error('Failed process to save new user data.', error);
-  }
 }
 
 

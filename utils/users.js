@@ -42,8 +42,8 @@ const emailExists = async (email) => {
 }
 
 // If email & password is acceptable creates a new user
-// Inputs: String Email & Password | Outputs: String UID
-const createNewUser = async (email, password) => {
+// Inputs: String Email & Password | Outputs: User Object
+const createUser = async (email, password) => {
   // Auth creates new user
   console.log('Starting process to create new user');
   return auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
@@ -52,7 +52,7 @@ const createNewUser = async (email, password) => {
       email: email, password: password, newUserFlag: true,
     }).then(() => {
         console.log('Completed process to create new user succesfully');
-        return credentials.user.uid;
+        return credentials.user;
     }).catch((error) => {
       console.error('Failed process to save new user data');
       console.error(error.code);
@@ -69,10 +69,10 @@ const createNewUser = async (email, password) => {
 
 // Checks particular user id to see if its a new user
 // Inputs: String UID | Outputs: Boolean Flag
-const checkNewUserFlag = async (uid) => {
-  return database.collection('users').doc(uid).get().then((user) => {
-    if (user.exists) {
-      return user.data()['newUserFlag'];
+const checkNewUserFlag = async (user) => {
+  return database.collection('users').doc(user.uid).get().then((credentials) => {
+    if (credentials.exists) {
+      return credentials.data()['newUserFlag'];
     } else {
         console.error('Error: User does not exist!');
         return 'error';
@@ -86,12 +86,12 @@ const checkNewUserFlag = async (uid) => {
 }
 
 // Authenticates email & password and logins in user
-// Inputs: String Email & Password | Outputs: String UID
+// Inputs: String Email & Password | Outputs: User Object
 const loginUser = async (email, password) => {
   console.log('Attempting user authentication');
   return auth.signInWithEmailAndPassword(email, password).then((credentials) => {
       console.log('User login succesful!')
-      return credentials.user.uid;
+      return credentials.user;
     }).catch((error) => {
       console.error('User login failed');
       console.error(error.code);
@@ -100,4 +100,4 @@ const loginUser = async (email, password) => {
     })
 }
 
-export { getUsers, emailExists, validatePassword, createNewUser, checkNewUserFlag, loginUser };
+export { getUsers, emailExists, validatePassword, createUser, checkNewUserFlag, loginUser };

@@ -1,6 +1,3 @@
-// import styles from "../styles/Home.module.css";
-import Signin from "./signin";
-import Signup from "./signup";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
