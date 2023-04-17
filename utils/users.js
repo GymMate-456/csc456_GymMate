@@ -54,11 +54,15 @@ const createNewUser = async (email, password) => {
         console.log('Completed process to create new user succesfully');
         return credentials.user.uid;
     }).catch((error) => {
-      console.error('Failed process to save new user data.', error.code, error.message);
+      console.error('Failed process to save new user data');
+      console.error(error.code);
+      console.error(error.message);
       return 'error';
     });
   }).catch((error) => {
-    console.error('Failed process to create new user.', error.code, error.message);
+    console.error('Failed process to create new user');
+    console.error(error.code);
+    console.error(error.message);
     return 'error';
   });
 }
@@ -70,11 +74,13 @@ const checkNewUserFlag = async (uid) => {
     if (user.exists) {
       return user.data()['newUserFlag'];
     } else {
-        console.error('Error: User or flag does not exist!');
+        console.error('Error: User does not exist!');
         return 'error';
     }
   }).catch((error) => {
-    console.error('Failed to check new user flag.', error.code, error.message);
+    console.error('Failed to check new user flag');
+    console.error(error.code);
+    console.error(error.message);
     return 'error';
   });
 }
@@ -87,7 +93,9 @@ const loginUser = async (email, password) => {
       console.log('User login succesful!')
       return credentials.user.uid;
     }).catch((error) => {
-      console.error('User login failed!', error.code, error.message);
+      console.error('User login failed');
+      console.error(error.code);
+      console.error(error.message);
       return 'error';
     })
 }

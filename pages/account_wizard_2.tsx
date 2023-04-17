@@ -4,6 +4,8 @@ import Image from 'next/image';
 import tempLogo from "./../public/icons/temp_logo2.png";
 import Multiselect from 'multiselect-react-dropdown';
 import dynamic from 'next/dynamic';
+import { database } from '../utils/firebase';
+import { useRouter } from 'next/router';
 
 const LocationAutocomplete = dynamic(() => import('../utils/LocationAutocomplete'), {
   ssr: false, // Disable server-side rendering
@@ -11,7 +13,9 @@ const LocationAutocomplete = dynamic(() => import('../utils/LocationAutocomplete
 
 function Wizard2() {
   const [age, setAge] = useState('');
-  const [sportsPreference, setSportsPreference] = useState([]);
+  const [location, setLocation] = useState('');
+  const [sportsPreference, setSportsPreference] = useState('');
+  const router = useRouter();
   const sports = [
     'Football',
     'Basketball',
@@ -38,16 +42,28 @@ function Wizard2() {
     setLocation(place);
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit =async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // handle wizard2 input submit logic here
-  }
+    // handle signin logic here
 
-  function console_check() {
-    console.log("Age", age)
-    console.log("Location", location?.formatted_address)
-    console.log("Sports: ", sportsPreference);
-  }
+    try {
+      await database.collection('users').doc(router.query['uid']?.toString()).update({
+        age: age, location: location, sportsPreference: sportsPreference
+      });
+
+      router.push({
+        pathname: '/',
+        query: { uid: router.query['uid']?.toString() },
+      });
+    } catch (error) {
+      // error message to the user
+      alert('An error occurred while creating a new user.');
+
+      // Log the error to the console for debugging purposes
+      console.error('Failed process to save new user data.', error);
+    }
+}
+
 
   return (
     <div className={styles.container}>
@@ -87,7 +103,7 @@ function Wizard2() {
             />
           </label>
           <br />
-          <button className={styles.button} type="submit" onClick={console_check}>Continue</button>
+          <button className={styles.button} type="submit">Continue</button>
         </form>
         <br></br>
       </div>
