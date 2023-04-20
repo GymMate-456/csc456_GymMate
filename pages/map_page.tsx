@@ -1,8 +1,7 @@
 import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
-import tempLogo from "./../public/icons/temp_logo2.png";
-
+import tempLogo from "../public/icons/temp_logo2.jpg";
 function MapPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
