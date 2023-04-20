@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
-import tempLogo from "./../public/icons/temp_logo2.png";
+import logo from "./../public/icons/logo.png";
 import { database } from '../utils/firebase';
 import { useRouter } from 'next/router';
 
@@ -28,22 +28,22 @@ function Wizard1() {
     <div className={styles.container}>
       <div className={styles.card}>
       <div className={styles.image_container}>
-          <Image src={tempLogo} alt="Image" className={styles.logo}/>
+          <Image src={logo} alt="Image" className={styles.logo}/>
         </div>
         <h1 className={styles.heading}>Tell us more about you</h1>
         <form onSubmit={handleSubmit}>
           <label className={styles.label}>
-            First Name:
+            First Name
             <input className={styles.input} type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
           </label>
           <br />
           <label className={styles.label}>
-            Last Name:
+            Last Name
             <input className={styles.input} type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
           </label>
           <br />
           <label className={styles.label}>
-            Gender:
+            Gender
             <input className={styles.input} type="text" value={gender} onChange={(e) => setGender(e.target.value)} />
           </label>
           <br />
