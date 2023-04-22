@@ -31,6 +31,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         />
         <link rel="apple-touch-icon" href="/apple-icon.png"></link>
         <meta name="theme-color" content="#317EFB" />
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtcHsE_bksH3Gsu8UUeUVtyIVV4cWfvto&libraries=places"></script>
       </Head>
       <Component {...pageProps} />
     </>
