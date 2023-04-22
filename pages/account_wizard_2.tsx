@@ -69,7 +69,7 @@ function Wizard2() {
     <div className={styles.container}>
       <div className={styles.card}>
       <div className={styles.image_container}>
-          <Image src={tempLogo} alt="Image" className={styles.logo}/>
+          <Image src={logo} alt="Image" className={styles.logo}/>
         </div>
         <h1 className={styles.heading}>Tell us more about you</h1>
         <form onSubmit={handleSubmit}>

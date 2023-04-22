@@ -3,9 +3,8 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f3f6f8;
   }
-  
+
   .card {
     width: 600px;
     background-color: #fff;
@@ -13,20 +12,20 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     border-radius: 4px;
   }
-  
+
   .heading {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 500;
     margin-bottom: 24px;
+    color: #573E6B;
   }
-  
+
   .label {
     display: block;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 16px;
     margin-bottom: 8px;
   }
-  
+
   .input {
     display: block;
     width: 100%;
@@ -39,11 +38,11 @@
     outline: none;
     transition: border-color 0.2s;
   }
-  
+
   .input:focus {
-    border-color: #b14100;
+    border-color: #9356AA;
   }
-  
+
   .button {
     display: block;
     width: 100%;
@@ -52,24 +51,30 @@
     font-size: 16px;
     font-weight: 600;
     color: #fff;
-    background-color: #b14100;
+    background-color: #A45FBE;
     border: none;
     border-radius: 2px;
     cursor: pointer;
     outline: none;
     transition: background-color 0.2s;
+    font-family: "Rockwell";
   }
-  
+
   .button:hover {
-    background-color: #b14100;
+    background-color: #9356AA;
   }
-  
+
   .links {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: #573E6B;
   }
-  
+
+  .forgot:hover, .new:hover, .existing:hover {
+     text-decoration: underline;
+  }
+
   .error{
       color: red;
   }
@@ -80,6 +85,6 @@
   }
 
   .logo {
-    height: 40%;
-    width: 40%;
+    height: 35%;
+    width: 35%;
   }
