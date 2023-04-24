@@ -2,7 +2,6 @@ import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
 import logo from "./../public/icons/logo.png";
-import tempLogo from "./../public/icons/temp_logo2.png";
 import Multiselect from 'multiselect-react-dropdown';
 import dynamic from 'next/dynamic';
 import { database } from '../utils/firebase';

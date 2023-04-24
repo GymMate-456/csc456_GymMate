@@ -1,7 +1,7 @@
 import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
-import tempLogo from "./../public/icons/temp_logo2.png";
+import logo from "./../public/icons/logo.png";
 import dynamic from 'next/dynamic';
 
 const LocationAutocomplete = dynamic(() => import('../utils/LocationAutocomplete'), {
