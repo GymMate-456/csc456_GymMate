@@ -37,8 +37,8 @@ export default function Home() {
     <div>
       {currentUser ? (
         <>
-          <p>{`Signed in as ${localStorage['uid']}`}</p>
-          <p>{`User ID: ${JSON.parse(localStorage['user']).uid}`}</p>
+          <p>{`Signed in as ${JSON.parse(localStorage['user']).email}`}</p>
+          <p>{`User ID: ${localStorage['uid']}`}</p>
           <p>This is where we can have our main components for the app</p>
           <button onClick={signOutUser}>Sign Out</button>
         </>
