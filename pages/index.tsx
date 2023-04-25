@@ -1,13 +1,17 @@
-import styles from '../styles/Home.module.css'
-import Signin from './sign_in'
-import Signup from './sign_up'
+import styles from "../styles/Home.module.css";
+import Signin from "./sign_in";
+import Signup from "./sign_up";
 import React, { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
+import { wrapper } from "../store";
+// import { useSelector } from "react-redux";
+// import { AppState } from "../store/types";
 
-export default function Home() {
+function Home() {
   //variable to help keep track if user is signed in or not
-  const[currentUser, setCurrentUser] = useState<any | null>(null);
+  const [currentUser, setCurrentUser] = useState<any | null>(null);
+  // const userID = useSelector((state: AppState): any => state.user.userID);
 
   //function to sign the user out (if signed in)
   const signOutUser = () => {
@@ -21,14 +25,14 @@ export default function Home() {
   //useEffect to check if user is signed in or not
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser){
+      if (currentUser) {
         setCurrentUser(currentUser);
       } else {
         setCurrentUser(null);
       }
     });
     return () => {
-      listen()
+      listen();
     };
   }, []);
 
@@ -38,7 +42,7 @@ export default function Home() {
     <div>
       {currentUser ? (
         <>
-          <p>{`Signed in as ${currentUser.email}`}</p>
+          <p>{`Signed in as ${currentUser.email}} the user id is ${10}}`} </p>
           <button onClick={signOutUser}>Sign Out</button>
         </>
       ) : (
@@ -46,7 +50,8 @@ export default function Home() {
           <Signin></Signin>
         </>
       )}
-      
     </div>
-  )
+  );
 }
+
+export default wrapper.withRedux(Home);
