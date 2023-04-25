@@ -14,13 +14,13 @@ function Wizard1() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // handle account initalization here
-    const user = router.query['user']!.toString()
-    database.collection('users').doc(JSON.parse(user).uid).update({
+    const uid = router.query['uid']?.toString()
+    database.collection('users').doc(uid).update({
       firstName: firstName, lastName: lastName, gender: gender
     }).then(() => {
       router.push({
         pathname: '/account_wizard_2',
-        query: { user: user },
+        query: { uid: uid },
       });
     }).catch((error) =>  {
       // error message to the user

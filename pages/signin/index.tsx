@@ -14,21 +14,21 @@ export default function Signin() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // User login authentication
-    const user = await loginUser(email, password);
+    const uid = await loginUser(email, password);
     // If succesful user login
-    if (user != 'error') {
+    if (uid != 'error') {
       // if new user flag enabled
-      if (await checkNewUserFlag(user)) {
+      if (await checkNewUserFlag(uid)) {
         // Routes to account initalization
         router.push({
           pathname: '/account_wizard_1',
-          query: { user: JSON.stringify(user) },
+          query: { uid: uid },
         });
       } else {
         // Routes back to home
         router.push({
           pathname: '/',
-          query: { user: JSON.stringify(user) },
+          query: { uid: uid },
         });
       }
     }

@@ -23,12 +23,12 @@ export default function Signup() {
     // Validate email & password
     if (await validateForm(email, password)) {
       // Create user authentication & register in database
-      const user = await createUser(email, password);
-      if (user != 'error') {
+      const uid = await createUser(email, password);
+      if (uid != 'error') {
         // New users are pushed to account initalization
         router.push({
           pathname: '/account_wizard_1',
-          query: { user: JSON.stringify(user) },
+          query: { uid: uid },
         });
       } 
     }

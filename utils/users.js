@@ -52,6 +52,7 @@ const createUser = async (email, password) => {
       email: email, password: password, newUserFlag: true,
     }).then(() => {
         console.log('Completed process to create new user succesfully');
+        console.log(credentials.user.uid)
         return credentials.user.uid;
     }).catch((error) => {
       console.error('Failed process to save new user data');
