@@ -42,7 +42,7 @@ const emailExists = async (email) => {
 }
 
 // If email & password is acceptable creates a new user
-// Inputs: String Email & Password | Outputs: User Object
+// Inputs: String Email & Password | Outputs: String UID
 const createUser = async (email, password) => {
   // Auth creates new user
   console.log('Starting process to create new user');
@@ -52,7 +52,7 @@ const createUser = async (email, password) => {
       email: email, password: password, newUserFlag: true,
     }).then(() => {
         console.log('Completed process to create new user succesfully');
-        return credentials.user;
+        return credentials.user.uid;
     }).catch((error) => {
       console.error('Failed process to save new user data');
       console.error(error.code);
@@ -69,8 +69,8 @@ const createUser = async (email, password) => {
 
 // Checks particular user id to see if its a new user
 // Inputs: String UID | Outputs: Boolean Flag
-const checkNewUserFlag = async (user) => {
-  return database.collection('users').doc(user.uid).get().then((credentials) => {
+const checkNewUserFlag = async (uid) => {
+  return database.collection('users').doc(uid).get().then((credentials) => {
     if (credentials.exists) {
       return credentials.data()['newUserFlag'];
     } else {
@@ -86,18 +86,18 @@ const checkNewUserFlag = async (user) => {
 }
 
 // Authenticates email & password and logins in user
-// Inputs: String Email & Password | Outputs: User Object
+// Inputs: String Email & Password | Outputs: String UID
 const loginUser = async (email, password) => {
   console.log('Attempting user authentication');
   return auth.signInWithEmailAndPassword(email, password).then((credentials) => {
-      console.log('User login succesful!')
-      return credentials.user;
-    }).catch((error) => {
-      console.error('User login failed');
-      console.error(error.code);
-      console.error(error.message);
-      return 'error';
-    })
+    console.log('User login succesful!')
+    return credentials.user.uid;
+  }).catch((error) => {
+    console.error('User login failed');
+    console.error(error.code);
+    console.error(error.message);
+    return 'error';
+  })
 }
 
 export { getUsers, emailExists, validatePassword, createUser, checkNewUserFlag, loginUser };
