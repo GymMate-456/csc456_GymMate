@@ -13,6 +13,8 @@ export default function Home() {
   // Function to sign the user out (if signed in)
   const signOutUser = () => {
     signOut(auth).then(() => {
+      localStorage['user'] = null;
+      localStorage['uid'] = null;
       console.log("Signed out successfully!");
     }).catch((error) => console.log(error));
   };
