@@ -3,7 +3,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import Link from "next/link";
 import styles from "../styles/Signin.module.css";
-import tempLogo from "../public/icons/temp_logo2.png";
+import logo from "../public/icons/logo.png";
 import Image from "next/image";
 
 export default function Home() {
@@ -46,7 +46,7 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.card}>
             <div className={styles.image_container}>
-              <Image src={tempLogo} alt="Image" className={styles.logo} />
+              <Image src={logo} alt="Image" className={styles.logo} />
             </div>
             <Link href="/signin">
               <button className={styles.button}>Sign In</button>
