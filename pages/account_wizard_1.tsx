@@ -14,14 +14,10 @@ function Wizard1() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // handle account initalization here
-    const uid = router.query['uid']?.toString()
-    database.collection('users').doc(uid).update({
+    database.collection('users').doc(localStorage['uid']).update({
       firstName: firstName, lastName: lastName, gender: gender
     }).then(() => {
-      router.push({
-        pathname: '/account_wizard_2',
-        query: { uid: uid },
-      });
+      router.push('/account_wizard_2');
     }).catch((error) =>  {
       // error message to the user
       alert('An error occurred while creating a new user.');

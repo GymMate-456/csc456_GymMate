@@ -5,7 +5,7 @@ import Image from "next/image";
 import {
   emailExists,
   validatePassword,
-  createUser,
+  signUp,
 } from "../../utils/users";
 import Link from "next/link";
 import { useRouter } from 'next/router';
@@ -20,17 +20,8 @@ export default function Signup() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Validate email & password
-    if (await validateForm(email, password)) {
-      // Create user authentication & register in database
-      const uid = await createUser(email, password);
-      if (uid != 'error') {
-        // New users are pushed to account initalization
-        router.push({
-          pathname: '/account_wizard_1',
-          query: { uid: uid },
-        });
-      } 
+    if (await signUp(email, password)) {
+      router.push('/account_wizard_1');
     }
   };
 

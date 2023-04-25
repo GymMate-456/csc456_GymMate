@@ -2,7 +2,7 @@ import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import Image from "next/image";
 import tempLogo from "../../public/icons/temp_logo2.png";
-import { loginUser, checkNewUserFlag } from '../../utils/users'
+import { userFlag, signIn } from '../../utils/users'
 import Link from "next/link";
 import { useRouter } from 'next/router';
 
@@ -14,22 +14,16 @@ export default function Signin() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // User login authentication
-    const uid = await loginUser(email, password);
-    // If succesful user login
-    if (uid != 'error') {
+    if (await signIn(email, password)) {
       // if new user flag enabled
-      if (await checkNewUserFlag(uid)) {
+      console.log(localStorage['uid'])
+      console.log(JSON.stringify(localStorage['user']))
+      if (await userFlag(localStorage['uid'])) {
         // Routes to account initalization
-        router.push({
-          pathname: '/account_wizard_1',
-          query: { uid: uid },
-        });
+        router.push('/account_wizard_1');
       } else {
         // Routes back to home
-        router.push({
-          pathname: '/',
-          query: { uid: uid },
-        });
+        router.push('/');
       }
     }
   }

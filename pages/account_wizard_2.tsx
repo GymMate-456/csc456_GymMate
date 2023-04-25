@@ -14,14 +14,10 @@ function Wizard2() {
   const handleSubmit =async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // finalize account initalization logic 
-    const uid = router.query['uid']?.toString()
-    await database.collection('users').doc(uid).update({
+    await database.collection('users').doc(localStorage['uid']).update({
       age: age, location: location, sportsPreference: sportsPreference, newUserFlag: false
     }).then(() => {
-      router.push({
-        pathname: '/',
-        query: { uid: uid },
-      });
+      router.push('/');
     }).catch((error) =>  {
       // error message to the user
       alert('An error occurred while creating a new user.');
@@ -29,7 +25,6 @@ function Wizard2() {
       console.error('Failed process to save new user data.', error);
     });
 }
-
 
   return (
     <div className={styles.container}>
