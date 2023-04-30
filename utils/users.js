@@ -1,12 +1,6 @@
 import { async } from "@firebase/util";
 import { auth, database } from "./firebase";
 
-const getUsers = async () => {
-  // Here is an example of how to get the data from the users collection on firestore
-  const snapshot = await database.collection('users').get();
-  snapshot.docs.forEach((docs) => console.log(docs.data()));
-};
-
 // Check if password is valid
 // Inputs: String Password | Outputs: Boolean Valid
 const validatePassword = (password, setPasswordError, confirmPassword, setConfirmPasswordError) => {
@@ -20,10 +14,9 @@ const validatePassword = (password, setPasswordError, confirmPassword, setConfir
   } else if (!/[A-Z]/.test(password)) {
     valid = false;
     setPasswordError('Password requires atleast one capital.');
-  } 
-  if (password !== confirmPassword) {
+  } else if (password !== confirmPassword) {
     valid = false;
-    setConfirmPasswordError('Passwords do not match');
+    setConfirmPasswordError('Passwords do not match!');
   }
   return valid;
 } 
@@ -34,7 +27,7 @@ const emailExists = async (email) => {
   const userDB = await database.collection('users').get();
   for (const user of userDB.docs) {
     if (user.data()['email'] == email) {
-      alert('Email already exists. Please use another email or login.')
+      alert('Email already exists. Please use another email or signIn.')
       return true;
     }
   }
@@ -42,8 +35,8 @@ const emailExists = async (email) => {
 }
 
 // If email & password is acceptable creates a new user
-// Inputs: String Email & Password | Outputs: String UID
-const createNewUser = async (email, password) => {
+// Inputs: String Email & Password | Outputs: Boolean Success
+const signUp = async (email, password) => {
   // Auth creates new user
   console.log('Starting process to create new user');
   return auth.createUserWithEmailAndPassword(email, password).then((credentials) => {
@@ -51,53 +44,51 @@ const createNewUser = async (email, password) => {
     return database.collection('users').doc(credentials.user.uid).set({
       email: email, password: password, newUserFlag: true,
     }).then(() => {
-        console.log('Completed process to create new user succesfully');
-        return credentials.user.uid;
+      console.log('Completed process to create new user succesfully');
+      // Caching User Object & UID
+      localStorage['user'] = JSON.stringify(credentials.user)
+      localStorage['uid'] = credentials.user.uid
+      return true;
     }).catch((error) => {
-      console.error('Failed process to save new user data');
-      console.error(error.code);
-      console.error(error.message);
-      return 'error';
+      console.error('Failed process to save new user data', error.code, error.message);;
+      return false;
     });
   }).catch((error) => {
-    console.error('Failed process to create new user');
-    console.error(error.code);
-    console.error(error.message);
-    return 'error';
+    console.error('Failed process to create new user', error.code, error.message);
+    return false;
   });
 }
 
 // Checks particular user id to see if its a new user
 // Inputs: String UID | Outputs: Boolean Flag
-const checkNewUserFlag = async (uid) => {
-  return database.collection('users').doc(uid).get().then((user) => {
-    if (user.exists) {
-      return user.data()['newUserFlag'];
+const userFlag = async (uid) => {
+  return database.collection('users').doc(uid).get().then((credentials) => {
+    if (credentials.exists) {
+      return credentials.data()['newUserFlag'];
     } else {
-        console.error('Error: User does not exist!');
-        return 'error';
+      console.error('Error: User does not exist!');
+      return null;
     }
   }).catch((error) => {
-    console.error('Failed to check new user flag');
-    console.error(error.code);
-    console.error(error.message);
-    return 'error';
+    console.error('Failed to check new user flag', error.code, error.message);
+    return null;
   });
 }
 
-// Authenticates email & password and logins in user
+// Authenticates email & password and signIns in user
 // Inputs: String Email & Password | Outputs: String UID
-const loginUser = async (email, password) => {
+const signIn = async (email, password) => {
   console.log('Attempting user authentication');
   return auth.signInWithEmailAndPassword(email, password).then((credentials) => {
-      console.log('User login succesful!')
-      return credentials.user.uid;
-    }).catch((error) => {
-      console.error('User login failed');
-      console.error(error.code);
-      console.error(error.message);
-      return 'error';
-    })
+    console.log('User signIn succesful!')
+    // Caching User Object & UID
+    localStorage['user'] = JSON.stringify(credentials.user)
+    localStorage['uid'] = credentials.user.uid
+    return true;
+  }).catch((error) => {
+    console.error('User signIn failed', error.code, error.message);
+    return false;
+  })
 }
 
-export { getUsers, emailExists, validatePassword, createNewUser, checkNewUserFlag, loginUser };
+export { emailExists, validatePassword, userFlag, signUp, signIn };
