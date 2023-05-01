@@ -88,3 +88,10 @@
     height: 35%;
     width: 35%;
   }
+
+  .header_icons {
+    height: 25%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
