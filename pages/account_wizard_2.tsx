@@ -1,9 +1,9 @@
 import { useState, FormEvent } from 'react';
 import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
-import tempLogo from "./../public/icons/temp_logo2.png";
 import { database } from '../utils/firebase';
 import { useRouter } from 'next/router';
+import logo from "./../public/icons/logo.png";
 
 function Wizard2() {
   const [age, setAge] = useState('');
@@ -30,7 +30,7 @@ function Wizard2() {
     <div className={styles.container}>
       <div className={styles.card}>
       <div className={styles.image_container}>
-          <Image src={tempLogo} alt="Image" className={styles.logo}/>
+          <Image src={logo} alt="Image" className={styles.logo}/>
         </div>
         <h1 className={styles.heading}>Tell us more about you</h1>
         <form onSubmit={handleSubmit}>
