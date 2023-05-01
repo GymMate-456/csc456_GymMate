@@ -11,10 +11,10 @@ test.describe('Signup', () => {
 
   test('allows a user to sign up', async ({ page }) => {
     // Fill out and submit the signup form
-    await page.fill('[name="email"]', 'testuser@example.com');
-    await page.fill('[name="password"]', 'password123');
-    await page.fill('[name="confirmPassword"]', 'password123');
-    await page.click('[type="submit"]');
+    await page.locator('xpath=//input[@name="email"]').fill('testuser@example.com');
+    await page.locator('xpath=//input[@name="password"]').fill('password123');
+    await page.locator('xpath=//input[@name="confirmPassword"]').fill('password123');
+    await page.locator('xpath=//button[text()="Sign up"]').click();
 
     // Wait for the page to navigate to the account wizard
     await expect(page.url()).toMatch('/account_wizard_1');
@@ -27,37 +27,38 @@ test.describe('Signup', () => {
 
   test('displays an error message for invalid email', async ({ page }) => {
     // Fill out the form with an invalid email address and submit
-    await page.fill('[name="email"]', 'invalidemail');
-    await page.fill('[name="password"]', 'password123');
-    await page.fill('[name="confirmPassword"]', 'password123');
-    await page.click('[type="submit"]');
+    await page.locator('xpath=//input[@name="email"]').fill('invalidemail');
+    await page.locator('xpath=//input[@name="password"]').fill('password123');
+    await page.locator('xpath=//input[@name="confirmPassword"]').fill('password123');
+    await page.locator('xpath=//button[text()="Sign up"]').click();
 
     // Verify that an error message is displayed for the email field
-    const errorMessage = await page.innerText('.error');
+    const errorMessage = await page.locator('xpath=//div[contains(@class, "error")]').innerText();
     expect(errorMessage).toBe('Invalid email address.');
   });
 
   test('displays an error message for invalid password', async ({ page }) => {
     // Fill out the form with a password that is too short and submit
-    await page.fill('[name="email"]', 'testuser@example.com');
-    await page.fill('[name="password"]', 'short');
-    await page.fill('[name="confirmPassword"]', 'short');
-    await page.click('[type="submit"]');
+    await page.locator('xpath=//input[@name="email"]').fill('testuser@example.com');
+    await page.locator('xpath=//input[@name="password"]').fill('short');
+    await page.locator('xpath=//input[@name="confirmPassword"]').fill('short');
+    await page.locator('xpath=//button[text()="Sign up"]').click();
 
     // Verify that an error message is displayed for the password field
-    const errorMessage = await page.innerText('.error');
+    const errorMessage = await page.locator('xpath=//div[contains(@class, "error")]').innerText();
     expect(errorMessage).toBe('Password must be at least 8 characters.');
   });
 
   test('displays an error message for mismatched passwords', async ({ page }) => {
     // Fill out the form with mismatched passwords and submit
-    await page.fill('[name="email"]', 'testuser@example.com');
-    await page.fill('[name="password"]', 'password123');
-    await page.fill('[name="confirmPassword"]', 'password456');
-    await page.click('[type="submit"]');
+    await page.locator('xpath=//input[@name="email"]').fill('testuser@example.com');
+    await page.locator('xpath=//input[@name="password"]').fill('password123');
+    await page.locator('xpath=//input[@name="confirmPassword"]').fill('password456');
+    await page.locator('xpath=//button[text()="Sign up"]').click();
 
     // Verify that an error message is displayed for the confirm password
-    const errorMessage = await page.innerText('.error');
+    const errorMessage = await page.locator('xpath=//div[contains(@class, "error")]').innerText();
     expect(errorMessage).toBe('Passwords do not match.');
   });
 });
+
