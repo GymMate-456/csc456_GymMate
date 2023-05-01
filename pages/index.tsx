@@ -3,7 +3,10 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import Link from "next/link";
 import styles from "../styles/Signin.module.css";
+import profile from "../public/icons/profile.png";
 import logo from "../public/icons/logo.png";
+import logo2 from "../public/icons/logo2.png";
+import chat from "../public/icons/chat.png";
 import Image from "next/image";
 
 export default function Home() {
@@ -37,6 +40,11 @@ export default function Home() {
     // If user is signed in, display the item(s) in the first fragment
     // If not, display item(s) in the second fragment block (sign in)
     <div>
+      <div className={styles.header_icons}>
+        <Link href="/profile"><Image src={profile} alt="Image"/></Link>
+        <Image src={logo2} alt="Image"/>
+        <Link href="/chat"><Image src={chat} alt="Image"/></Link>
+      </div>
       {currentUser ? (
         <>
           <p>{`Signed in as ${JSON.parse(localStorage['user']).email}`}</p>
