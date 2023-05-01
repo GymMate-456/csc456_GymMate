@@ -1,9 +1,9 @@
 import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import Image from "next/image";
-import tempLogo from "../../public/icons/temp_logo.png";
 import { userFlag, signIn } from '../../utils/users'
 import Link from "next/link";
+import logo from "./../../public/icons/logo.png";
 import { useRouter } from 'next/router';
 
 export default function Signin() {
