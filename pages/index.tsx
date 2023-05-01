@@ -1,28 +1,25 @@
-// import styles from "../styles/Home.module.css";
-import Signin from "./signin";
-import Signup from "./signup";
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import Link from "next/link";
 import styles from "../styles/Signin.module.css";
-import tempLogo from "../public/icons/temp_logo2.png";
+import logo from "../public/icons/logo.png";
 import Image from "next/image";
 
 export default function Home() {
-  //variable to help keep track if user is signed in or not
+  // Variable to help keep track if user is signed in or not
   const [currentUser, setCurrentUser] = useState<any | null>(null);
 
-  //function to sign the user out (if signed in)
+  // Function to sign the user out (if signed in)
   const signOutUser = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("Signed out successfully!");
-      })
-      .catch((error) => console.log(error));
+    signOut(auth).then(() => {
+      localStorage['user'] = null;
+      localStorage['uid'] = null;
+      console.log("Signed out successfully!");
+    }).catch((error) => console.log(error));
   };
 
-  //useEffect to check if user is signed in or not
+  // useEffect to check if user is signed in or not
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -37,20 +34,21 @@ export default function Home() {
   }, []);
 
   return (
-    //If user is signed in, display the item(s) in the first fragment
-    //If not, display item(s) in the second fragment block (sign in)
+    // If user is signed in, display the item(s) in the first fragment
+    // If not, display item(s) in the second fragment block (sign in)
     <div>
       {currentUser ? (
         <>
-          <p>{`Signed in as ${currentUser.email}`}</p>
-          <p>This is where we can have our main components for tha app</p>
+          <p>{`Signed in as ${JSON.parse(localStorage['user']).email}`}</p>
+          <p>{`User ID: ${localStorage['uid']}`}</p>
+          <p>This is where we can have our main components for the app</p>
           <button onClick={signOutUser}>Sign Out</button>
         </>
       ) : (
         <div className={styles.container}>
           <div className={styles.card}>
             <div className={styles.image_container}>
-              <Image src={tempLogo} alt="Image" className={styles.logo} />
+              <Image src={logo} alt="Image" className={styles.logo} />
             </div>
             <Link href="/signin">
               <button className={styles.button}>Sign In</button>
