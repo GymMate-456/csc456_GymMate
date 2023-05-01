@@ -45,16 +45,16 @@ export default function Home() {
       bio: "I love playing tennis and hiking. Looking for someone who shares similar interests!",
       cardImgUrl:
         "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
-      dislikes: null,
+      dislikes: [],
       email: "peter@example.com",
       flagNewUser: false,
-      likes: 4,
-      likesMe: null,
+      likes: [],
+      likesMe: [],
       location: {
         latitude: 40.7128,
         longitude: -74.006,
       },
-      matches: null,
+      matches: [],
       profileImgUrl:
         "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
       sports: ["Tennis", "Hiking", "Yoga"],
@@ -68,16 +68,16 @@ export default function Home() {
       bio: "I'm passionate about swimming and cycling. Looking for someone to train with!",
       cardImgUrl:
         "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
-      dislikes: null,
+      dislikes: [],
       email: "sara@example.com",
       flagNewUser: false,
-      likes: 2,
-      likesMe: null,
+      likes: [],
+      likesMe: [],
       location: {
         latitude: 40.7128,
         longitude: -74.006,
       },
-      matches: null,
+      matches: [],
       profileImgUrl:
         "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
       sports: ["Swimming", "Cycling", "Running"],
