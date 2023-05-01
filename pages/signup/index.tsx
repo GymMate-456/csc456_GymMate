@@ -12,9 +12,11 @@ export default function Home() {
 
   // Function to sign the user out (if signed in)
   const signOutUser = () => {
-    signOut(auth).then(() => {
-      console.log("Signed out successfully!");
-    }).catch((error) => console.log(error));
+    signOut(auth)
+      .then(() => {
+        console.log("Signed out successfully!");
+      })
+      .catch((error) => console.log(error));
   };
 
   // useEffect to check if user is signed in or not
@@ -37,8 +39,8 @@ export default function Home() {
     <div>
       {currentUser ? (
         <>
-          <p>{`Signed in as ${localStorage['uid']}`}</p>
-          <p>{`User ID: ${JSON.parse(localStorage['user']).uid}`}</p>
+          <p>{`Signed in as ${localStorage["uid"]}`}</p>
+          <p>{`User ID: ${JSON.parse(localStorage["user"]).uid}`}</p>
           <p>This is where we can have our main components for the app</p>
           <button onClick={signOutUser}>Sign Out</button>
         </>

@@ -8,18 +8,22 @@ import logo from "../public/icons/logo.png";
 import logo2 from "../public/icons/logo2.png";
 import chat from "../public/icons/chat.png";
 import Image from "next/image";
+import Filter from "../utils/filter_component";
 
+import GymMateCards from "./GymMateCard";
 export default function Home() {
   // Variable to help keep track if user is signed in or not
   const [currentUser, setCurrentUser] = useState<any | null>(null);
 
   // Function to sign the user out (if signed in)
   const signOutUser = () => {
-    signOut(auth).then(() => {
-      localStorage['user'] = null;
-      localStorage['uid'] = null;
-      console.log("Signed out successfully!");
-    }).catch((error) => console.log(error));
+    signOut(auth)
+      .then(() => {
+        localStorage["user"] = null;
+        localStorage["uid"] = null;
+        console.log("Signed out successfully!");
+      })
+      .catch((error) => console.log(error));
   };
 
   // useEffect to check if user is signed in or not
@@ -35,6 +39,54 @@ export default function Home() {
       listen();
     };
   }, []);
+  const data = [
+    {
+      age: "28",
+      bio: "I love playing tennis and hiking. Looking for someone who shares similar interests!",
+      cardImgUrl:
+        "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
+      dislikes: null,
+      email: "peter@example.com",
+      flagNewUser: false,
+      likes: 4,
+      likesMe: null,
+      location: {
+        latitude: 40.7128,
+        longitude: -74.006,
+      },
+      matches: null,
+      profileImgUrl:
+        "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
+      sports: ["Tennis", "Hiking", "Yoga"],
+      uid: "789ghi",
+      userID: "789ghi",
+      username: "Peter",
+      zipcode: "10001",
+    },
+    {
+      age: "25",
+      bio: "I'm passionate about swimming and cycling. Looking for someone to train with!",
+      cardImgUrl:
+        "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
+      dislikes: null,
+      email: "sara@example.com",
+      flagNewUser: false,
+      likes: 2,
+      likesMe: null,
+      location: {
+        latitude: 40.7128,
+        longitude: -74.006,
+      },
+      matches: null,
+      profileImgUrl:
+        "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
+      sports: ["Swimming", "Cycling", "Running"],
+      uid: "abc123",
+      userID: "abc123",
+      username: "Sara",
+      zipcode: "10002",
+    },
+  ];
 
   return (
     // If user is signed in, display the item(s) in the first fragment
@@ -43,13 +95,18 @@ export default function Home() {
       {currentUser ? (
         <>
           <div className={styles.header_icons}>
-            <Link href="/profile"><Image src={profile} alt="Image"/></Link>
-            <Image src={logo2} alt="Image"/>
-            <Link href="/chat"><Image src={chat} alt="Image"/></Link>
+            <Link href="/profile">
+              <Image src={profile} alt="Image" />
+            </Link>
+            <Image src={logo2} alt="Image" />
+            <Link href="/chat">
+              <Image src={chat} alt="Image" />
+            </Link>
           </div>
-          <p>{`Signed in as ${JSON.parse(localStorage['user']).email}`}</p>
-          <p>{`User ID: ${localStorage['uid']}`}</p>
-          <p>This is where we can have our main components for the app</p>
+          <Filter></Filter>
+          {/* Goes here */}
+          <GymMateCards data={data} />
+
           <button onClick={signOutUser}>Sign Out</button>
         </>
       ) : (
