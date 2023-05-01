@@ -40,13 +40,13 @@ export default function Home() {
     // If user is signed in, display the item(s) in the first fragment
     // If not, display item(s) in the second fragment block (sign in)
     <div>
-      <div className={styles.header_icons}>
-        <Link href="/profile"><Image src={profile} alt="Image"/></Link>
-        <Image src={logo2} alt="Image"/>
-        <Link href="/chat"><Image src={chat} alt="Image"/></Link>
-      </div>
       {currentUser ? (
         <>
+          <div className={styles.header_icons}>
+            <Link href="/profile"><Image src={profile} alt="Image"/></Link>
+            <Image src={logo2} alt="Image"/>
+            <Link href="/chat"><Image src={chat} alt="Image"/></Link>
+          </div>
           <p>{`Signed in as ${JSON.parse(localStorage['user']).email}`}</p>
           <p>{`User ID: ${localStorage['uid']}`}</p>
           <p>This is where we can have our main components for the app</p>
