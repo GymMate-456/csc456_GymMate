@@ -2,6 +2,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/storage";
+const geofirestore = require("geofirestore");
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
@@ -20,9 +21,11 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 // Use these for db & auth
 const database = firebaseApp.firestore();
+const GeoFirestore = geofirestore.initializeApp(database);
+const geocollection = GeoFirestore.collection("users");
 const auth = firebase.auth();
 const storage = firebase.storage(); // add this line to initialize storage
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
-export { auth, database, provider, storage };
+export { auth, database, provider, storage, GeoFirestore, geocollection };

@@ -2,9 +2,11 @@ import { useState, FormEvent } from "react";
 import styles from "../styles/Signin.module.css";
 import Image from "next/image";
 import logo from "./../public/icons/logo.png";
-import { database } from "../utils/firebase";
+import { database, geocollection } from "../utils/firebase";
 import { useRouter } from "next/router";
 import Multiselect from "multiselect-react-dropdown";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
 
 function Wizard2() {
   const [username, setUsername] = useState("");
@@ -12,16 +14,21 @@ function Wizard2() {
   const [sports, setSports] = useState<{ id: string; name: string }[]>([]);
   const [zipcode, setZipcode] = useState("");
   const router = useRouter();
+  const [location, setLocation] = useState<firebase.firestore.GeoPoint | null>(
+    null
+  );
+  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    console.log(username, bio, sports);
     // Check that all required fields are filled out
-    if (!username || !bio || sports.length === 0 || !zipcode) {
+    if (!username || !bio || sports.length === 0) {
       alert("Please fill out all required fields.");
       return;
     }
-
+    await handleLocation();
     // All checks passed - update the user account
     database
       .collection("users")
@@ -41,6 +48,57 @@ function Wizard2() {
         // Log the error to the console for debugging purposes
         console.error("Failed process to update user data.", error);
       });
+  };
+  const handleLocation = async () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLocation(new firebase.firestore.GeoPoint(latitude, longitude));
+          setSuccessMessage("Location Received Successfully");
+          setErrorMessage("");
+          const geopoint = new firebase.firestore.GeoPoint(latitude, longitude);
+          geocollection
+            .doc(localStorage["uid"])
+            .update({
+              location: geopoint,
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        },
+        (error) => {
+          console.error(error);
+          setSuccessMessage("");
+          setErrorMessage("Cannot Get Location - Defaulting Location to NYC");
+          setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
+          const geopoint = new firebase.firestore.GeoPoint(40.7128, -74.006);
+          geocollection
+            .doc(localStorage["uid"])
+            .update({
+              location: geopoint,
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser");
+      setSuccessMessage("");
+      setErrorMessage("Cannot Get Location - Defaulting Location to NYC");
+      setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
+      setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
+      const geopoint = new firebase.firestore.GeoPoint(40.7128, -74.006);
+      geocollection
+        .doc(localStorage["uid"])
+        .update({
+          location: geopoint,
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   return (
@@ -94,15 +152,9 @@ function Wizard2() {
             />
           </label>
           <br />
-          <label className={styles.label}>
-            Zipcode
-            <input
-              className={styles.input}
-              type="text"
-              value={zipcode}
-              onChange={(e) => setZipcode(e.target.value)}
-            />
-          </label>
+
+          {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           <br />
           <button className={styles.button} type="submit">
             Complete
