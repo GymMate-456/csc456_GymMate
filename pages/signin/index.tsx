@@ -13,17 +13,11 @@ export default function Signin() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // User login authentication
     if (await signIn(email, password)) {
-      // if new user flag enabled
-      console.log(localStorage['uid'])
-      console.log(JSON.stringify(localStorage['user']))
-      if (await userFlag(localStorage['uid'])) {
-        // Routes to account initalization
-        router.push('/account_wizard_1');
+      if (await userFlag(localStorage["uid"])) {
+        router.push("/account_wizard_1");
       } else {
-        // Routes back to home
-        router.push('/');
+        router.push("/");
       }
     }
   }
