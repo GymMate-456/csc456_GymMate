@@ -1,65 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../utils/firebase";
-import Link from "next/link";
+import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import logo from "./../../public/icons/logo.png";
 import Image from "next/image";
 
-export default function Home() {
-  // Variable to help keep track if user is signed in or not
-  const [currentUser, setCurrentUser] = useState<any | null>(null);
+import {
+  emailExists,
+  validatePassword,
+  signUp,
+} from "../../utils/users";
+import Link from "next/link";
+import { useRouter } from 'next/router';
 
-  // Function to sign the user out (if signed in)
-  const signOutUser = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("Signed out successfully!");
-      })
-      .catch((error) => console.log(error));
+export default function Signup() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (await validateForm(email, password)) {
+      if (await signUp(email, password)) {
+        router.push("/account_wizard_1");
+      }
+    }
   };
 
-  // useEffect to check if user is signed in or not
-  useEffect(() => {
-    const listen = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setCurrentUser(currentUser);
-      } else {
-        setCurrentUser(null);
-      }
-    });
-    return () => {
-      listen();
-    };
-  }, []);
+  const validateForm = async (email: String, password: String) => {
+    setPasswordError("");
+    setConfirmPasswordError("");
+    if (!(await emailExists(email))) {
+      return validatePassword(
+        password,
+        setPasswordError,
+        confirmPassword,
+        setConfirmPasswordError
+      );
+    }
+    return false;
+  };
 
   return (
-    // If user is signed in, display the item(s) in the first fragment
-    // If not, display item(s) in the second fragment block (sign in)
-    <div>
-      {currentUser ? (
-        <>
-          <p>{`Signed in as ${localStorage["uid"]}`}</p>
-          <p>{`User ID: ${JSON.parse(localStorage["user"]).uid}`}</p>
-          <p>This is where we can have our main components for the app</p>
-          <button onClick={signOutUser}>Sign Out</button>
-        </>
-      ) : (
-        <div className={styles.container}>
-          <div className={styles.card}>
-            <div className={styles.image_container}>
-              <Image src={logo} alt="Image" className={styles.logo} />
-            </div>
-            <Link href="/signin">
-              <button className={styles.button}>Sign In</button>
-            </Link>
-            <Link href="/signup">
-              <button className={styles.button}>Sign Up</button>
-            </Link>
-            <br></br>
-          </div>
+    <div className={styles.container}>
+      <div className={styles.card}>
+        <div className={styles.image_container}>
+          <Image src={logo} alt="Image" className={styles.logo} />
         </div>
-      )}
+        <h1 className={styles.heading}>Create an account</h1>
+        <form onSubmit={handleSubmit}>
+          <label className={styles.label}>
+            Email:
+            <input
+              className={styles.input}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </label>
+          <br />
+          <label className={styles.label}>
+            Password:
+            <input
+              className={styles.input}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </label>
+          <span className={styles.error}>{passwordError}</span>
+          <br />
+          <label className={styles.label}>
+            Confirm Password:
+            <input
+              className={styles.input}
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </label>
+          <span className={styles.error}>{confirmPasswordError}</span>
+          <br />
+          <button className={styles.button} type="submit">
+            Continue
+          </button>
+        </form>
+        <br></br>
+        <div className={styles.links}>
+          <Link href="/signin">Already on GymMate?</Link>
+        </div>
+      </div>
     </div>
   );
 }
