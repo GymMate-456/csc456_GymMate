@@ -18,7 +18,7 @@ function Wizard1() {
     database.collection('users').doc(localStorage['uid']).update({
       firstName: firstName, lastName: lastName, gender: gender
     }).then(async () => {
-      router.push("/account_wizard_2");
+      router.push('/account_wizard_2');
     }).catch(async (error) =>  {
       // error message to the user
       alert('An error occurred while creating a new user.');
