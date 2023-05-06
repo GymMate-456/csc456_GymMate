@@ -5,6 +5,8 @@ import { userFlag, signIn } from '../../utils/users'
 import Link from "next/link";
 import logo from "./../../public/icons/logo.png";
 import { useRouter } from 'next/router';
+import { ToastDependency } from '../../utils/toasts'
+
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -15,9 +17,9 @@ export default function Signin() {
     event.preventDefault();
     if (await signIn(email, password)) {
       if (await userFlag(localStorage["uid"])) {
-        router.push("/account_wizard_1");
+        router.push('/account_wizard_1');
       } else {
-        router.push("/");
+        router.push('/');
       }
     }
   }
@@ -60,6 +62,7 @@ export default function Signin() {
           <Link className={styles.new} href="/signup">New here? Join now</Link>
         </div>
       </div>
+      <ToastDependency />
     </div>
   );
 }

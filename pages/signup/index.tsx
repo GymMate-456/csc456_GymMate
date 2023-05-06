@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import logo from "./../../public/icons/logo.png";
 import Image from "next/image";
+import { ToastContainer } from 'react-toastify';
 
 import {
   emailExists,
@@ -32,7 +33,7 @@ export default function Signup() {
     setPasswordError("");
     setConfirmPasswordError("");
     if (!(await emailExists(email))) {
-      return validatePassword(
+      return await validatePassword(
         password,
         setPasswordError,
         confirmPassword,
@@ -91,6 +92,7 @@ export default function Signup() {
           <Link href="/signin">Already on GymMate?</Link>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

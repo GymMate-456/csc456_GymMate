@@ -1,22 +1,26 @@
-import { async } from "@firebase/util";
-import { auth, database } from "./firebase";
+import { auth, database } from './firebase';
+import { sendToast } from './toasts';
 
 // Check if password is valid
 // Inputs: String Password | Outputs: Boolean Valid
-const validatePassword = (password, setPasswordError, confirmPassword, setConfirmPasswordError) => {
+const validatePassword = async (password, setPasswordError, confirmPassword, setConfirmPasswordError) => {
   let valid = true;
   if (password.length <= 6) {
     valid = false;
     setPasswordError('Password is too short.');
+    await sendToast(3, 'Password is too short.', 3000);
   } else if (!/\d/.test(password)) {
     valid = false;
     setPasswordError('Password requires atleast one number.');
+    await sendToast(3, 'Password requires atleast one number.', 3000);
   } else if (!/[A-Z]/.test(password)) {
     valid = false;
     setPasswordError('Password requires atleast one capital.');
+    await sendToast(3, 'Password requires atleast one capital.', 3000);
   } else if (password !== confirmPassword) {
     valid = false;
     setConfirmPasswordError('Passwords do not match!');
+    await sendToast(3, 'Passwords do not match!', 3000);
   }
   return valid;
 } 
@@ -27,7 +31,7 @@ const emailExists = async (email) => {
   const userDB = await database.collection('users').get();
   for (const user of userDB.docs) {
     if (user.data()['email'] == email) {
-      alert('Email already exists. Please use another email or signIn.')
+      await sendToast(3, 'Error: Email Already Exists!', 3000);
       return true;
     }
   }
@@ -43,18 +47,20 @@ const signUp = async (email, password) => {
     // Saves user into users database for record keeping
     return database.collection('users').doc(credentials.user.uid).set({
       email: email, password: password, newUserFlag: true,
-    }).then(() => {
+    }).then(async () => {
       console.log('Completed process to create new user succesfully');
       // Caching User Object & UID
       localStorage['user'] = JSON.stringify(credentials.user)
       localStorage['uid'] = credentials.user.uid
       return true;
-    }).catch((error) => {
-      console.error('Failed process to save new user data', error.code, error.message);;
+    }).catch(async (error) => {
+      console.error('Failed process to save new user data', error.code, error.message);
+      await sendToast(3, error.message, 3000);
       return false;
     });
-  }).catch((error) => {
+  }).catch(async (error) => {
     console.error('Failed process to create new user', error.code, error.message);
+    await sendToast(3, error.message, 3000);
     return false;
   });
 }
@@ -78,17 +84,18 @@ const userFlag = async (uid) => {
 // Authenticates email & password and signIns in user
 // Inputs: String Email & Password | Outputs: String UID
 const signIn = async (email, password) => {
-  console.log('Attempting user authentication');
-  return auth.signInWithEmailAndPassword(email, password).then((credentials) => {
+  return auth.signInWithEmailAndPassword(email, password).then(async (credentials) => {
     console.log('User signIn succesful!')
     // Caching User Object & UID
     localStorage['user'] = JSON.stringify(credentials.user)
     localStorage['uid'] = credentials.user.uid
+    await sendToast(1, 'Successfully Logged in!', 750);
     return true;
-  }).catch((error) => {
+  }).catch(async (error) => {
     console.error('User signIn failed', error.code, error.message);
+    await sendToast(3, error.message, 3000);
     return false;
-  })
+   })
 }
 
 export { emailExists, validatePassword, userFlag, signUp, signIn };

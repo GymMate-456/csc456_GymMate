@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { database } from '../utils/firebase';
 import { useRouter } from 'next/router';
 import logo from "./../public/icons/logo.png";
+import { ToastDependency, sendToast } from '../utils/toasts'
 
 function Wizard2() {
   const [age, setAge] = useState('');
@@ -11,18 +12,19 @@ function Wizard2() {
   const [sportsPreference, setSportsPreference] = useState('');
   const router = useRouter();
 
-  const handleSubmit =async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // finalize account initalization logic 
     await database.collection('users').doc(localStorage['uid']).update({
       age: age, location: location, sportsPreference: sportsPreference, newUserFlag: false
-    }).then(() => {
-      router.push('/');
-    }).catch((error) =>  {
+    }).then(async () => {
+      router.push("/");
+    }).catch(async (error) =>  {
       // error message to the user
       alert('An error occurred while creating a new user.');
       // Log the error to the console for debugging purposes
       console.error('Failed process to save new user data.', error);
+      await sendToast(3, error.message, 3000)
     });
 }
 
@@ -53,6 +55,7 @@ function Wizard2() {
         </form>
         <br></br>
       </div>
+      <ToastDependency />
     </div>
   );
 }
