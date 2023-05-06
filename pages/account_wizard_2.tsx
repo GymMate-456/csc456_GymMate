@@ -18,7 +18,7 @@ function Wizard2() {
     await database.collection('users').doc(localStorage['uid']).update({
       age: age, location: location, sportsPreference: sportsPreference, newUserFlag: false
     }).then(async () => {
-      router.push("/");
+      router.push('/');
     }).catch(async (error) =>  {
       // error message to the user
       alert('An error occurred while creating a new user.');
