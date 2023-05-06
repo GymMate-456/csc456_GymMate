@@ -9,7 +9,7 @@ export default function MyPage() {
   return (
     <div>
       <h1>GymMate Home Page</h1>
-      <Filter />
+      {/* <Filter /> */}
     </div>
   );
 }

@@ -13,6 +13,7 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import Grid from '@mui/material/Grid';
 import Multiselect from 'multiselect-react-dropdown';
 import styles from '../styles/Signin.module.css';
+import axios from 'axios';
 
 const sportsList = [
   'Soccer',
@@ -23,7 +24,35 @@ const sportsList = [
   'Swimming',
 ];
 
-const Filter: React.FC = () => {
+interface FilterProps {
+  currentUserId: string;
+  onFilteredData: (data: string[]) => void;
+}
+
+interface Person {
+  userID: string;
+  username: string;
+  age: string;
+  bio: string;
+  sports: string[];
+  profileImgUrl: string;
+  cardImgUrl?: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+  zipcode: string;
+  email: string;
+  uid: string;
+  likes: string[];
+  likesMe?: string[];
+  matches?: string[];
+  dislikes?: string[];
+  flagNewUser?: boolean;
+}
+
+
+const Filter: React.FC<FilterProps> = ({ currentUserId, onFilteredData}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedSports, setSelectedSports] = useState<string[]>([]);
   const [distance, setDistance] = useState<number>(1);
@@ -32,11 +61,47 @@ const Filter: React.FC = () => {
     setDistance(newValue as number);
   };
 
-  const applyFilters = () => {
+  const applyFilters = async () => {
     console.log('Selected sports:', selectedSports);
     console.log('Selected distance:', distance);
+    try {
+      const filteredUsers = await filterUsersBySports(selectedSports, currentUserId);
+      onFilteredData(filteredUsers);
+      // Do something with the filteredUsers, such as updating state or passing it to another component
+    } catch (error: unknown) {
+      // Handle error
+      if (error instanceof Error) {
+        console.error('Error applying filters:', error.message);
+      } else {
+        console.error('Error applying filters:', String(error));
+      }
+    }
     setIsOpen(false);
     // Call API to fetch users based on filters
+  };
+
+  const filterUsersBySports = async (selectedSports: string[], currentUserId: string) => {
+    if (selectedSports.length === 0) {
+      return [];
+    }
+    try {
+      const response = await axios.post('/api/filterUsersBySports', {
+        selectedSports,
+        currentUserId,
+      });
+      const filteredUsers = response.data;
+      console.log('Filtered users:', filteredUsers);
+      return filteredUsers;
+      console.log("Filtered Users");
+      console.log(filteredUsers);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error applying filters:', error.message);
+      } else {
+        console.error('Error applying filters:', String(error));
+      }
+      return [];
+    }
   };
 
   return (
