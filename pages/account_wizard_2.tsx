@@ -3,7 +3,7 @@ import styles from '../styles/Signin.module.css';
 import Image from 'next/image';
 import { database } from '../utils/firebase';
 import { useRouter } from 'next/router';
-import logo from "./../public/icons/logo.png";
+import logo from './../public/icons/logo.png';
 import { ToastDependency, sendToast } from '../utils/toasts'
 
 function Wizard2() {
@@ -18,7 +18,7 @@ function Wizard2() {
     await database.collection('users').doc(localStorage['uid']).update({
       age: age, location: location, sportsPreference: sportsPreference, newUserFlag: false
     }).then(async () => {
-      router.push("/");
+      router.push('/');
     }).catch(async (error) =>  {
       // error message to the user
       alert('An error occurred while creating a new user.');
@@ -32,26 +32,26 @@ function Wizard2() {
     <div className={styles.container}>
       <div className={styles.card}>
       <div className={styles.image_container}>
-          <Image src={logo} alt="Image" className={styles.logo}/>
+          <Image src={logo} alt='Image' className={styles.logo}/>
         </div>
         <h1 className={styles.heading}>Tell us more about you</h1>
         <form onSubmit={handleSubmit}>
           <label className={styles.label}>
             Age:
-            <input className={styles.input} type="text" value={age} onChange={(e) => setAge(e.target.value)} />
+            <input className={styles.input} type='text' value={age} onChange={(e) => setAge(e.target.value)} />
           </label>
           <br />
           <label className={styles.label}>
             Location:
-            <input className={styles.input} type="text" value={location} onChange={(e) => setLocation(e.target.value)} />
+            <input className={styles.input} type='text' value={location} onChange={(e) => setLocation(e.target.value)} />
           </label>
           <br />
           <label className={styles.label}>
             Sports Preference:
-            <input className={styles.input} type="text" value={sportsPreference} onChange={(e) => setSportsPreference(e.target.value)} />
+            <input className={styles.input} type='text' value={sportsPreference} onChange={(e) => setSportsPreference(e.target.value)} />
           </label>
           <br />
-          <button className={styles.button} type="submit">Continue</button>
+          <button className={styles.button} type='submit'>Continue</button>
         </form>
         <br></br>
       </div>

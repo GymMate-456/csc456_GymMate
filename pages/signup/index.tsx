@@ -2,7 +2,7 @@ import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import logo from "./../../public/icons/logo.png";
 import Image from "next/image";
-import { ToastContainer } from 'react-toastify';
+import { ToastDependency } from '../../utils/toasts'
 
 import {
   emailExists,
@@ -92,7 +92,7 @@ export default function Signup() {
           <Link href="/signin">Already on GymMate?</Link>
         </div>
       </div>
-      <ToastContainer />
+      <ToastDependency />
     </div>
   );
 }
