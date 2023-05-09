@@ -4,7 +4,6 @@ import Image from "next/image";
 import logo from "./../public/icons/logo.png";
 import { database, storage } from "../utils/firebase";
 import { useRouter } from "next/router";
-import { CircularProgress } from "@material-ui/core";
 
 function Wizard3() {
   const [cardImage, setCardImage] = useState<File | null>(null);
@@ -168,7 +167,7 @@ function Wizard3() {
           <br />
           {loading ? (
             <div className={styles.loading}>
-              <CircularProgress />
+              <span>loading... </span>
             </div>
           ) : (
             <button className={styles.button} type="submit">
