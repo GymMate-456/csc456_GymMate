@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import dynamic from "next/dynamic";
+import TinderCardWrapper from "./TinderCardWrapper";
 
-const TinderCard = dynamic(() => import("react-tinder-card"), { ssr: false });
 interface Person {
   userID: string;
   username: string;
@@ -90,7 +89,7 @@ const GymMateCards: React.FC<Props> = ({ data }) => {
       <div className="gymMateCards__cardContainer">
         {data &&
           data.map((person) => (
-            <TinderCard
+            <TinderCardWrapper
               className="swipe"
               key={person.username}
               preventSwipe={["up", "down"]}
@@ -121,7 +120,7 @@ const GymMateCards: React.FC<Props> = ({ data }) => {
                   <span style={textStyle}>Male</span>
                 </p>
               </div>
-            </TinderCard>
+            </TinderCardWrapper>
           ))}
       </div>
     </div>
