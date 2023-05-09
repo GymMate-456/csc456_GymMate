@@ -3,6 +3,7 @@ import styles from "../styles/Signin.module.css";
 import Image from "next/image";
 import logo from "./../public/icons/logo.png";
 import { database, storage } from "../utils/firebase";
+import { ToastDependency, sendToast } from "../utils/toasts"
 import { useRouter } from "next/router";
 
 function Wizard3() {
@@ -30,23 +31,24 @@ function Wizard3() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {},
-        (error) => {
-          alert("An error occurred while uploading your images.");
+        async (error) => {
           console.error("Failed process to save user image data.", error);
+          await sendToast("error", "An error occurred while uploading your images.", 3000);
           setLoading(false);
         },
         () => {
           storage
             .ref(`users/${localStorage["uid"]}/cardImage`)
             .getDownloadURL()
-            .then((url) => {
+            .then(async (url) => {
               setCardImageUrl(url);
+              await sendToast("success", "Card Image Uploaded Succesfully!", 1000);
               setLoading(false);
             });
         }
       );
     } else {
-      alert("Please select an image to upload");
+      await sendToast("error", "Please select an image to upload", 3000);
     }
   };
 
@@ -67,30 +69,31 @@ function Wizard3() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {},
-        (error) => {
-          alert("An error occurred while uploading your images.");
+        async (error) => {
           console.error("Failed process to save user image data.", error);
+          await sendToast("error", "An error occurred while uploading your images.", 3000);
           setLoading(false);
         },
         () => {
           storage
             .ref(`users/${localStorage["uid"]}/profileImage`)
             .getDownloadURL()
-            .then((url) => {
+            .then(async (url) => {
               setProfileImageUrl(url);
+              await sendToast("success", "Profile Image Uploaded Succesfully!", 1000);
               setLoading(false);
             });
         }
       );
     } else {
-      alert("Please select an image to upload");
+      await sendToast("error", "Please select an image to upload", 3000);
     }
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (cardImageUrl === "" || profileImageUrl === "") {
-      alert("Please upload both images before continuing.");
+      await sendToast("error", "Please upload both images before continuing.", 3000);
     } else {
       setLoading(true);
       database
@@ -101,13 +104,14 @@ function Wizard3() {
           profileImgUrl: profileImageUrl,
           newUserFlag: false,
         })
+        .then(await sendToast("success", "Account Initalization Completed!", 500))
         .then(() => {
           setLoading(false);
           router.push("/");
         })
-        .catch((error) => {
-          alert("An error occurred while creating a new user.");
+        .catch(async (error) => {
           console.error("Failed process to save new user data.", error);
+          await sendToast("error", "An error occurred while creating a new user.", 3000);
         });
     }
   };
@@ -177,6 +181,7 @@ function Wizard3() {
         </form>
         <br />
       </div>
+      <ToastDependency/>
     </div>
   );
 }

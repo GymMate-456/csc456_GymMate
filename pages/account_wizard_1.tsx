@@ -3,6 +3,7 @@ import styles from "../styles/Signin.module.css";
 import Image from "next/image";
 import logo from "./../public/icons/logo.png";
 import { database } from "../utils/firebase";
+import { ToastDependency, sendToast } from "../utils/toasts"
 import { useRouter } from "next/router";
 
 function Wizard1() {
@@ -10,7 +11,6 @@ function Wizard1() {
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -18,16 +18,14 @@ function Wizard1() {
 
     // Check that all required fields are filled out
     if (!firstName || !lastName || !gender || !age) {
-      setErrorMessage("Please fill out all required fields.");
+      await sendToast("error", "Please fill out all required fields.", 3000);
       return;
     }
 
     // Validate age
     const parsedAge = parseInt(age, 10);
     if (isNaN(parsedAge) || parsedAge < 16) {
-      setErrorMessage(
-        "Please enter a valid age (must be a number greater than or equal to 16)."
-      );
+      await sendToast("warning", "Minimum age is 16 years old!", 3000);
       return;
     }
 
@@ -41,12 +39,13 @@ function Wizard1() {
         gender: gender,
         age: age,
       })
+      .then(await sendToast("success", "Account Initalization Part 1 Completed!", 500))
       .then(() => {
         router.push("/account_wizard_2");
       })
-      .catch((error) => {
+      .catch(async (error) => {
         // error message to the user
-        alert("An error occurred while creating a new user.");
+        await sendToast("error", "An error occurred while creating a new user.", 3000);
         // Log the error to the console for debugging purposes
         console.error("Failed process to save new user data.", error);
       });
@@ -59,7 +58,6 @@ function Wizard1() {
           <Image src={logo} alt="Image" className={styles.logo} />
         </div>
         <h1 className={styles.heading}>Tell us more about you</h1>
-        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <label className={styles.label}>
             First Name
@@ -95,24 +93,22 @@ function Wizard1() {
             </select>
           </label>
           <br />
-
           <label className={styles.label}>
             Age
             <input
               className={styles.input}
               type="number"
-              min="16"
               value={age}
               onChange={(e) => setAge(e.target.value)}
             />
           </label>
-          <br />
           <button className={styles.button} type="submit">
             Continue
           </button>
         </form>
         <br />
       </div>
+      <ToastDependency/>
     </div>
   );
 }
