@@ -15,14 +15,16 @@ interface TinderCardWrapperProps {
 const TinderCardWrapper: React.FC<TinderCardWrapperProps> = (props) => {
   const { children, className, key, preventSwipe, onSwipe } = props;
   return (
-    <TinderCard
-      className={className}
-      key={key}
-      preventSwipe={preventSwipe}
-      onSwipe={onSwipe}
-    >
-      {children}
-    </TinderCard>
+    <div>
+      <TinderCard
+        className={className}
+        key={key}
+        preventSwipe={preventSwipe}
+        onSwipe={onSwipe}
+      >
+        {children}
+      </TinderCard>
+    </div>
   );
 };
 
