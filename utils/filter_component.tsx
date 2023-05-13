@@ -16,12 +16,18 @@ import styles from '../styles/Signin.module.css';
 import axios from 'axios';
 
 const sportsList = [
-  'Soccer',
-  'Basketball',
-  'Tennis',
-  'Baseball',
-  'Volleyball',
-  'Swimming',
+  "Baseball",
+  "Basketball",
+  "Boxing",
+  "Calisthenics",
+  "Gymnastics",
+  "Soccer",
+  "Swimming",
+  "Tennis",
+  "Track and Field",
+  "Volleyball",
+  "Weightlifting",
+  "Wrestling",
 ];
 
 interface FilterProps {
