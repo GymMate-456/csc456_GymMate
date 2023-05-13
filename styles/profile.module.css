@@ -1,0 +1,43 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: "var(--spacing-5)";
+    gap: 25px
+  }
+  
+  .pictures {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:center;
+    gap: 40px;
+  }
+
+  .under_picture{
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content:center;
+    gap: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+  
+  .textField {
+    margin: 30px;
+    width: 65%;
+  }
+  
+  .button {
+    margin: var(--spacing-1);
+  }
+  
+  
+  .label {
+    font-family: Rockwell;
+    font-size: 13px;
+    opacity: 0.5;
+  }
+  
