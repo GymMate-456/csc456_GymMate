@@ -12,7 +12,7 @@ function searchGyms() {
         try {
           const response = await fetch(`/api/searchGyms?lat=${latitude}&long=${longitude}`);        
           const gyms = await response.json();
-          setGymData(gyms);
+          setGymData(gyms.results);
 
         } catch (error) {
           console.error('Error fetching gyms:', error);
@@ -54,7 +54,7 @@ function searchGyms() {
             </form>
             
             {/* Note that down below it might show "error" and highlight results/gym/index but the code will still work fine */}
-            {gymData && gymData.results && gymData.results.map((gym, index) => (
+            { gymData && gymData.map((gym, index) => (
                 <>
                     <GymCard key={index} gym={gym} />
                 </>

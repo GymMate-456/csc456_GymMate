@@ -11,6 +11,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.1",
+    "@mui/styles": "^5.12.3",
     "@react-google-maps/api": "^2.18.1",
     "@react-spring/web": "^9.7.2",
     "@types/google.maps": "^3.52.4",
