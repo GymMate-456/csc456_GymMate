@@ -16,7 +16,6 @@ export default function Profile() {
   return (
     <div>
       <Header backButton="" leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
-      <h2> This is the profile page</h2>
       <ProfileScreen/>
       <ToastDependency/>
     </div>

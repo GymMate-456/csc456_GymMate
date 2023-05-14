@@ -319,6 +319,7 @@ const ProfileScreen: React.FC = () => {
               color="secondary"
               onClick={handleSignOut}
               className={styles.button}
+              style={{marginBottom:'3%'}}
             >
               Sign Out
             </Button>

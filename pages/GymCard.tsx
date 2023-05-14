@@ -51,7 +51,7 @@ type GymCardProps = {
 };
 const GymCard: React.FC<GymCardProps> = ({ gym }) => {
   return (
-    <Card sx={{ maxWidth: 345, marginBottom: 2 }}>
+    <Card sx={{ maxWidth: 500, marginBottom: 2, padding: 10 }}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {gym && gym.name ? gym.name : "Name Not available"}

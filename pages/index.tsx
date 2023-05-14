@@ -10,59 +10,11 @@ import Header from "./header";
 
 import GymMateCards from "./GymMateCard";
 
-const data = [
-  {
-    age: "28",
-    bio: "I love playing tennis and hiking. Looking for someone who shares similar interests!",
-    cardImgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
-    dislikes: [],
-    email: "peter@example.com",
-    flagNewUser: false,
-    likes: [],
-    likesMe: [],
-    location: {
-      latitude: 40.7128,
-      longitude: -74.006,
-    },
-    matches: [],
-    profileImgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
-    sports: ["Tennis", "Hiking", "Yoga"],
-    id: "789ghi",
-    userID: "789ghi",
-    username: "Peter",
-    zipcode: "10001",
-  },
-  {
-    age: "25",
-    bio: "I'm passionate about swimming and cycling. Looking for someone to train with!",
-    cardImgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
-    dislikes: [],
-    email: "sara@example.com",
-    flagNewUser: false,
-    likes: [],
-    likesMe: [],
-    location: {
-      latitude: 40.7128,
-      longitude: -74.006,
-    },
-    matches: [],
-    profileImgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
-    sports: ["Swimming", "Cycling", "Running"],
-    id: "abc123",
-    userID: "abc123",
-    username: "Sara",
-    zipcode: "10002",
-  },
-];
 
 export default function Home() {
   // Variable to help keep track if user is signed in or not
   const [currentUser, setCurrentUser] = useState<any | null>(null);
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState(null);
 
   const handleFilteredData = (data: any) => {
     // Process the data as needed
@@ -111,9 +63,9 @@ export default function Home() {
           </div>
           <Filter currentUserId={currentUser.uid} onFilteredData= {handleFilteredData}></Filter>
           {/* Goes here */}
-          <GymMateCards data={filteredData} />
-
-          <button onClick={signOutUser}>Sign Out</button>
+          <div style={{marginRight: "35%"}}>
+            <GymMateCards data={filteredData} />
+          </div>
         </>
       ) : (
         <div className={styles.container}>
