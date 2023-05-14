@@ -26,7 +26,6 @@
   }
   
   .textField {
-    margin: 30px;
     width: 65%;
   }
   
@@ -39,5 +38,14 @@
     font-family: Rockwell;
     font-size: 13px;
     opacity: 0.5;
+  }
+
+  .heading {
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 24px;
+    margin-left: 5%;
+    margin-right: 5%;
+    color: #573e6b;
   }
   

@@ -1,6 +1,8 @@
 import { FormEvent, useState, useEffect } from "react";
 import GymCard from "../GymCard";
 import Header from "../header";
+import styles from "../../styles/profile.module.css";
+import { TextField, Button, CircularProgress, Avatar} from '@mui/material';
 
 function searchGyms() {
   const [gymData, setGymData] = useState([]);
@@ -48,26 +50,36 @@ function searchGyms() {
 
       <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
 
-      <h1>Enter Coordinates to search for gyms nearby! </h1>
-
       <form onSubmit={handleSubmit}>
-        <label> Latitude: </label>
-        <input
-          type="text"
-          value={enteredLat}
-          onChange={(e) => setEnteredLat(e.target.value)}
-          placeholder="Enter Latitude.."
-        ></input>
-        <label> Longitude: </label>
-        <input
-          type="text"
-          value={enteredLong}
-          onChange={(e) => setEnteredLong(e.target.value)}
-          placeholder="Enter Longitude.."
-        ></input>
-        <button type="submit">Get Nearby Gyms</button>
+        <div className={styles.container}>
+          <div className={styles.heading}>Enter Coordinates to search for gyms nearby! </div>
+          <TextField
+              type="text"
+              label="Latitude"
+              value={enteredLat}
+              onChange={(e) => setEnteredLat(e.target.value)}
+              className={styles.textField}
+          />
+          <TextField
+              type="text"
+              label="Longitude"
+              value={enteredLong}
+              onChange={(e) => setEnteredLong(e.target.value)}
+              className={styles.textField}
+          />
+          <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              className={styles.button}
+            >
+              Get Nearby Gyms
+          </Button>
+          </div>
       </form>
-
+    
+    <div className={styles.container}>
+      
       {/* Note that down below it might show "error" and highlight results/gym/index but the code will still work fine */}
       {gymData &&
         gymData.map((gym, index) => (
@@ -75,6 +87,7 @@ function searchGyms() {
             <GymCard key={index} gym={gym} />
           </>
         ))}
+    </div>
     </>
   );
 }

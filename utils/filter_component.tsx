@@ -161,7 +161,7 @@ const Filter: React.FC<FilterProps> = ({ currentUserId, onFilteredData}) => {
         </Grid>
       </Toolbar>
       ) : (
-        <Button onClick={() => setIsOpen(true) } variant="contained" color="secondary">Show filter</Button>
+        <Button onClick={() => setIsOpen(true) } variant="contained" color="secondary" style={{marginLeft:"32%", marginRight:"32%"}}>Show filter</Button>
       )}
     </AppBar>
   );
