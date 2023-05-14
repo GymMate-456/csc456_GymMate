@@ -5,10 +5,12 @@ const withPWA = require('next-pwa')({
 
 module.exports = withPWA({
   // config
+  reactStrictMode: false,
 })
 
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  reactStrictMode: false,
 };
