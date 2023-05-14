@@ -19,8 +19,9 @@ export default async function handler(
     }
     const currentUserData = currentUserDoc.data();
 
-    const currentUserLikes = currentUserData.likes || [];
-    const currentUserDislikes = currentUserData.dislikes || [];
+    const currentUserLikes = (currentUserData && currentUserData.likes) || [];
+    const currentUserDislikes =
+      (currentUserData && currentUserData.dislikes) || [];
 
     const snapshot = await usersRef
       .where("sports", "array-contains-any", selectedSports)
