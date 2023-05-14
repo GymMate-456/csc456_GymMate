@@ -7,7 +7,7 @@ import search from "../public/icons/search.png";
 import chat from "../public/icons/chat.png";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-export default function Header({ leftButton, logoButton, rightButton, rightButton2, backButton}) {
+export default function Header({ leftButton, logoButton, rightButton, rightButton2, backButton}: any) {
   return (
     <header className={styles.header_icons}>
       {leftButton && (
@@ -32,7 +32,7 @@ export default function Header({ leftButton, logoButton, rightButton, rightButto
       )}
       {backButton && (
           <Link href="/chat">
-            <ArrowBackIcon  alt="Back Button" />
+            <ArrowBackIcon />
           </Link>
       )}
     </header>

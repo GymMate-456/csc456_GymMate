@@ -10,7 +10,7 @@ export default function Chat() {
   return (
     <div>
 
-      <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
+      <Header backButton="" leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
 
       <h2>This is the chat page</h2>
 
