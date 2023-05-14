@@ -91,6 +91,10 @@
   width: 25%;
 }
 
+.logo_button {
+  margin-left: 450px;
+}
+
 .header_icons {
   height: 15%;
   display: flex;
@@ -131,4 +135,20 @@
 .timeStamp {
   color: #888;
   font-size: 12px;
+}
+.convo {
+  background-color: lightgrey;
+  padding: 50px;
+}
+
+.profile_button {
+  margin-left: 50px;
+}
+
+.search_button {
+  margin-left: 250px;
+}
+
+.chat_button {
+  margin-right: 50px;
 }

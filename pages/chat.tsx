@@ -5,11 +5,7 @@ import { auth, database, storage } from '../utils/firebase';
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import Link from "next/link";
 import styles from "../styles/Signin.module.css";
-import profile from "../public/icons/profile.png";
-import logo from "../public/icons/logo.png";
-import logo2 from "../public/icons/logo2.png";
-import chat from "../public/icons/chat.png";
-import Image from "next/image";
+import Header from "./header";
 
 interface Chat {
   user1: string;
@@ -125,25 +121,23 @@ export default function Chat() {
   return (
     <div>
 
-      <div className={styles.header_icons}>
-        <Link href="/profile"><Image src={profile} alt="Image"/></Link>
-        <Link href="/"><Image src={logo2} alt="Image"/></Link>
-        <Image src={chat} alt="Image"/>
-      </div>
+      <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
       <div className={styles.message_container}>
         <h2>Chats</h2>
       </div>  
       {chatList.map((chat, index) => (
-        <div className={styles.message_container} key={index}>
-          <Avatar src={receiverProfiles[index]?.profileImgUrl} alt="Avatar" className={styles.avatar} />
-          <div className={styles.chatDetails}>
-            <div className={styles.receiverName}>
-              {receiverProfiles[index]?.firstName} {receiverProfiles[index]?.lastName}
+       <Link href="/individual_chat">
+          <div className={styles.message_container} key={index}>
+            <Avatar src={receiverProfiles[index]?.profileImgUrl} alt="Avatar" className={styles.avatar} />
+            <div className={styles.chatDetails}>
+              <div className={styles.receiverName}>
+                {receiverProfiles[index]?.firstName} {receiverProfiles[index]?.lastName}
+              </div>
+              <div className={styles.message}>Message content goes here...</div>
             </div>
-            <div className={styles.message}>Message content goes here...</div>
+            <div className={styles.timeStamp}>00:00</div>
           </div>
-          <div className={styles.timeStamp}>00:00</div>
-        </div>
+        </Link>
     ))}
     </div>
   );
