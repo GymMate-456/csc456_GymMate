@@ -8,6 +8,7 @@ import logo from "../public/icons/logo.png";
 import logo2 from "../public/icons/logo2.png";
 import chat from "../public/icons/chat.png";
 import Image from "next/image";
+import { ToastDependency } from "../utils/toasts"
 import ProfileScreen from "../utils/profile_comp";
 
 export default function Profile() {
@@ -21,7 +22,7 @@ export default function Profile() {
         <Link href="/chat"><Image src={chat} alt="Image"/></Link>
       </div>
       <ProfileScreen/>
-
+      <ToastDependency/>
     </div>
 
   );
