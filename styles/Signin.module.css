@@ -91,6 +91,10 @@
   width: 25%;
 }
 
+.logo_button {
+  margin-left: 450px;
+}
+
 .header_icons {
   height: 15%;
   display: flex;
@@ -98,4 +102,53 @@
   align-items: center;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin-bottom: 2%;
+}
+
+.message_container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.chatDetails {
+  flex-grow: 1;
+}
+
+.senderName {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.message {
+  color: #888;
+}
+
+.timeStamp {
+  color: #888;
+  font-size: 12px;
+}
+.convo {
+  background-color: lightgrey;
+  padding: 50px;
+}
+
+.profile_button {
+  margin-left: 50px;
+}
+
+.search_button {
+  margin-left: 250px;
+}
+
+.chat_button {
+  margin-right: 50px;
 }

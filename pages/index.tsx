@@ -3,30 +3,77 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import Link from "next/link";
 import styles from "../styles/Signin.module.css";
-import profile from "../public/icons/profile.png";
 import logo from "../public/icons/logo.png";
-import logo2 from "../public/icons/logo2.png";
-import chat from "../public/icons/chat.png";
 import Image from "next/image";
 import Filter from "../utils/filter_component";
+import Header from "./header";
 
 import GymMateCards from "./GymMateCard";
+
+const data = [
+  {
+    age: "28",
+    bio: "I love playing tennis and hiking. Looking for someone who shares similar interests!",
+    cardImgUrl:
+      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
+    dislikes: [],
+    email: "peter@example.com",
+    flagNewUser: false,
+    likes: [],
+    likesMe: [],
+    location: {
+      latitude: 40.7128,
+      longitude: -74.006,
+    },
+    matches: [],
+    profileImgUrl:
+      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
+    sports: ["Tennis", "Hiking", "Yoga"],
+    id: "789ghi",
+    userID: "789ghi",
+    username: "Peter",
+    zipcode: "10001",
+  },
+  {
+    age: "25",
+    bio: "I'm passionate about swimming and cycling. Looking for someone to train with!",
+    cardImgUrl:
+      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
+    dislikes: [],
+    email: "sara@example.com",
+    flagNewUser: false,
+    likes: [],
+    likesMe: [],
+    location: {
+      latitude: 40.7128,
+      longitude: -74.006,
+    },
+    matches: [],
+    profileImgUrl:
+      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
+    sports: ["Swimming", "Cycling", "Running"],
+    id: "abc123",
+    userID: "abc123",
+    username: "Sara",
+    zipcode: "10002",
+  },
+];
 
 export default function Home() {
   // Variable to help keep track if user is signed in or not
   const [currentUser, setCurrentUser] = useState<any | null>(null);
-  const [filteredData, setFilteredData] = useState(null);
+  const [filteredData, setFilteredData] = useState(data);
 
   const handleFilteredData = (data: any) => {
     // Process the data as needed
-    console.log("Filtered Data--data");
+    console.log("Filtered Data--data")
     setFilteredData(data);
     console.log(filteredData);
   };
 
-  useEffect(() => {
+  useEffect(()=>{
     console.log("filteredData changed");
-  }, [filteredData]);
+  },[filteredData])
 
   // Function to sign the user out (if signed in)
   const signOutUser = () => {
@@ -59,19 +106,10 @@ export default function Home() {
     <div>
       {currentUser ? (
         <>
-          <div className={styles.header_icons}>
-            <Link href="/profile">
-              <Image src={profile} alt="Image" />
-            </Link>
-            <Image src={logo2} alt="Image" />
-            <Link href="/chat">
-              <Image src={chat} alt="Image" />
-            </Link>
+          <div>
+            <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
           </div>
-          <Filter
-            currentUserId={currentUser.uid}
-            onFilteredData={handleFilteredData}
-          ></Filter>
+          <Filter currentUserId={currentUser.uid} onFilteredData= {handleFilteredData}></Filter>
           {/* Goes here */}
           <GymMateCards data={filteredData} />
 
