@@ -1,48 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { TextField, Button, CircularProgress, Avatar} from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { auth, database, storage } from '../utils/firebase'; 
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import Multiselect from "multiselect-react-dropdown";
-import { profile } from 'console';
+import styles from "../styles/profile.module.css";
 
-const useStyles = makeStyles((theme: any) => ({
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: theme.spacing(2),
-    },
-    pictures: {
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: theme.spacing(2),
-    },
-    textField: {
-      margin: theme.spacing(1),
-      width: '65%',
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-    avatar: {
-      width: theme.spacing(20),
-      height: theme.spacing(20),
-      marginBottom: theme.spacing(2),
-    },
-    label: {
-      fontFamily: "Rockwell",
-      fontSize: "13px",
-      opacity: "0.5",
-    }
-  }));
 
 const ProfileScreen: React.FC = () => {
-  const classes = useStyles();
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -248,17 +213,17 @@ const ProfileScreen: React.FC = () => {
   }
 
   return (
-    <div className={classes.container}>
+    <div className={styles.container}>
       {loading ? (
         <CircularProgress /> // Show a loading spinner while data is being fetched
       ) : (
         <>
-        <div className={classes.pictures}>
-          <div className={classes.container}>
+        <div className={styles.pictures}>
+          <div className={styles.container}>
             <Avatar
                 src={profileData.profileImgUrl}
                 alt="Profile Image"
-                className={classes.avatar}
+                sx={{ width: 150, height: 150 }}
               />
               <input
                 type="file"
@@ -269,16 +234,16 @@ const ProfileScreen: React.FC = () => {
                 variant="contained"
                 color="primary"
                 onClick={handleProfileImageUpload}
-                className={classes.button}
+                className={styles.button}
               >
                 Update Profile Image
               </Button>
             </div>
-            <div className={classes.container}>
+            <div className={styles.container}>
               <Avatar
                 src={profileData.cardImgUrl}
                 alt="Card Image"
-                className={classes.avatar}
+                sx={{ width: 150, height: 150 }}
               />
               <input
                 type="file"
@@ -289,35 +254,35 @@ const ProfileScreen: React.FC = () => {
                 variant="contained"
                 color="primary"
                 onClick={handleCardImageUpload}
-                className={classes.button}
+                className={styles.button}
               >
                 Update Card Image
               </Button>
             </div>
           </div>
-          <TextField
-            name="firstName"
-            label="First Name"
-            value={profileData.firstName}
-            onChange={handleInputChange}
-            className={classes.textField}
-          />
-          <TextField
-            name="lastName"
-            label="Last Name"
-            value={profileData.lastName}
-            onChange={handleInputChange}
-            className={classes.textField}
+            <TextField
+              name="firstName"
+              label="First Name"
+              value={profileData.firstName}
+              onChange={handleInputChange}
+              className={styles.textField}
             />
             <TextField
-              name="age"
-              label="Age"
-              value={profileData.age}
+              name="lastName"
+              label="Last Name"
+              value={profileData.lastName}
               onChange={handleInputChange}
-              className={classes.textField}
-            />
-            <div className={classes.textField}>
-            <label className={classes.label}>Sports</label>
+              className= {styles.textField}
+              />
+              <TextField
+                name="age"
+                label="Age"
+                value={profileData.age}
+                onChange={handleInputChange}
+                className={styles.textField}
+              />
+            <div className={styles.textField}>
+            <label className={styles.label}>Sports</label>
             <Multiselect
               isObject={false}
               options={sports_options}
@@ -333,13 +298,13 @@ const ProfileScreen: React.FC = () => {
               rows={4}
               value={profileData.bio}
               onChange={handleInputChange}
-              className={classes.textField}
+              className={styles.textField}
             />
             <Button
               variant="contained"
               color="primary"
               onClick={saveProfile}
-              className={classes.button}
+              className={styles.button}
             >
               Save
             </Button>
@@ -347,7 +312,7 @@ const ProfileScreen: React.FC = () => {
               variant="contained"
               color="secondary"
               onClick={handleSignOut}
-              className={classes.button}
+              className={styles.button}
             >
               Sign Out
             </Button>
