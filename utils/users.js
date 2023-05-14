@@ -46,11 +46,11 @@ const signUp = async (email, password) => {
       return await database
         .collection("users").doc(credentials.user.uid)
         .set({email: email, password: password, newUserFlag: true})
-        .then(() => {
-          localStorage["user"] = JSON.stringify(credentials.user)
-          localStorage["uid"] = credentials.user.uid
+        .then(async () => {
+          await sendToast("success", "User succesfully created!", 500);
+          localStorage["user"] = JSON.stringify(credentials.user);
+          localStorage["uid"] = credentials.user.uid;
         }) 
-        .then(await sendToast("success", "User succesfully created!", 500))
         .then(() => {
           return true
         })
@@ -72,11 +72,10 @@ const signUp = async (email, password) => {
 const signIn = async (email, password) => {
   return auth.signInWithEmailAndPassword(email, password)
     .then(async (credentials) => {
-      console.log("User signIn succesful!")
-      localStorage["user"] = JSON.stringify(credentials.user)
-      localStorage["uid"] = credentials.user.uid
+      await sendToast("success", "Succesfully Logged In!", 500);
+      localStorage["user"] = JSON.stringify(credentials.user);
+      localStorage["uid"] = credentials.user.uid;
     })
-    .then(await sendToast("success", "Succesfully Logged In!", 500))
     .then(() => {
       return true;
     })
@@ -97,7 +96,8 @@ const userFlag = async (uid) => {
       console.error("Error: User does not exist!");
       return null;
     }
-  }).catch(async (error) => {
+  })
+  .catch(async (error) => {
     console.error("Error:", error.code, error.message);
     await sendToast("Error:", error.message, 3000);
     return null;
