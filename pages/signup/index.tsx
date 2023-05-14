@@ -2,44 +2,24 @@ import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import logo from "./../../public/icons/logo.png";
 import Image from "next/image";
-
-import {
-  emailExists,
-  validatePassword,
-  signUp,
-} from "../../utils/users";
+import { ToastDependency } from "../../utils/toasts"
+import { validateCredentials, signUp } from "../../utils/users";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (await validateForm(email, password)) {
+    if (await validateCredentials(email, password, confirmPassword)) {
       if (await signUp(email, password)) {
         router.push("/account_wizard_1");
       }
     }
-  };
-
-  const validateForm = async (email: String, password: String) => {
-    setPasswordError("");
-    setConfirmPasswordError("");
-    if (!(await emailExists(email))) {
-      return validatePassword(
-        password,
-        setPasswordError,
-        confirmPassword,
-        setConfirmPasswordError
-      );
-    }
-    return false;
   };
 
   return (
@@ -69,7 +49,6 @@ export default function Signup() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </label>
-          <span className={styles.error}>{passwordError}</span>
           <br />
           <label className={styles.label}>
             Confirm Password:
@@ -80,8 +59,6 @@ export default function Signup() {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </label>
-          <span className={styles.error}>{confirmPasswordError}</span>
-          <br />
           <button className={styles.button} type="submit">
             Continue
           </button>
@@ -91,6 +68,7 @@ export default function Signup() {
           <Link href="/signin">Already on GymMate?</Link>
         </div>
       </div>
+      <ToastDependency />
     </div>
   );
 }
