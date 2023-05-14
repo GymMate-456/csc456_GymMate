@@ -2,7 +2,8 @@ import { useState, FormEvent } from "react";
 import styles from "../styles/Signin.module.css";
 import Image from "next/image";
 import logo from "./../public/icons/logo.png";
-import { database, geocollection } from "../utils/firebase";
+import { wizardTwo } from "../utils/users"
+import { geocollection } from "../utils/firebase";
 import { ToastDependency, sendToast } from "../utils/toasts"
 import { useRouter } from "next/router";
 import Multiselect from "multiselect-react-dropdown";
@@ -30,25 +31,9 @@ function Wizard2() {
     await handleLocation();
 
     // All checks passed - update the user account
-    database
-      .collection("users")
-      .doc(localStorage["uid"])
-      .update({
-        username: username,
-        bio: bio,
-        sports: sports.map((s) => s.name),
-        zipcode: zipcode,
-      })
-      .then(await sendToast("success", "Account Initalization Part 2 Completed!", 500))
-      .then(() => {
-        router.push("/account_wizard_3")
-      })
-      .catch(async (error) => {
-        // error message to the user
-        await sendToast("error", "An error occurred while updating user data.", 3000);
-        // Log the error to the console for debugging purposes
-        console.error("Failed process to update user data.", error);
-      });
+    if (await wizardTwo(username, bio, sports, zipcode)) {
+      router.push("/account_wizard_3");
+    }
   };
 
   const handleLocation = async () => {
@@ -57,22 +42,22 @@ function Wizard2() {
         const { latitude, longitude } = position.coords;
         setLocation(new firebase.firestore.GeoPoint(latitude, longitude));
         const geopoint = new firebase.firestore.GeoPoint(latitude, longitude);
-        await sendToast("success", "Location Received Successfully!", 500);
         geocollection
           .doc(localStorage["uid"])
           .update({location: geopoint})
+          .then(await sendToast("success", "Location Received Successfully!", 500))
           .catch(async (error) => {
             console.error(error);
             await sendToast("error", error.code, 3000);
           });
       }, async (error) => {
         console.error(error);
-        await sendToast("warning", "Cannot Get Location - Defaulting Location to NYC", 2000);
         setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
         const geopoint = new firebase.firestore.GeoPoint(40.7128, -74.006);
         geocollection
           .doc(localStorage["uid"])
           .update({location: geopoint})
+          .then(await sendToast("warning", "Cannot Get Location - Defaulting Location to NYC", 2000))
           .catch(async (error) => {
             console.error(error);
             await sendToast("error", error.message, 3000)
@@ -80,12 +65,12 @@ function Wizard2() {
       });
     } else {
       console.error("Geolocation is not supported by this browser");
-      await sendToast("warning", "Cannot Get Location - Defaulting Location to NYC", 2000);
       setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
       const geopoint = new firebase.firestore.GeoPoint(40.7128, -74.006);
       geocollection
         .doc(localStorage["uid"])
         .update({location: geopoint})
+        .then(await sendToast("error", "Cannot Get Location - Defaulting Location to NYC", 2000))
         .catch(async (error) => {
           console.error(error);
           await sendToast("error", error.message, 3000)

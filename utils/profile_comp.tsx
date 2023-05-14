@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { TextField, Button, CircularProgress, Avatar} from '@mui/material';
 import { auth, database, storage } from '../utils/firebase'; 
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { sendToast } from "../utils/toasts"
 import Multiselect from "multiselect-react-dropdown";
 import styles from "../styles/profile.module.css";
 
@@ -83,6 +84,7 @@ const ProfileScreen: React.FC = () => {
           setLoading(false);
         })
         .catch((error) => {
+
           console.log('Error fetching user data:', error);
           setLoading(false);
         });
@@ -187,12 +189,14 @@ const ProfileScreen: React.FC = () => {
       .collection('users')
       .doc(currentUser.uid)
       .update(profileData)
-      .then(() => {
+      .then(async () => {
+        await sendToast("success", "Profile updated succesfully", 500);
         console.log('Profile updated successfully.');
         setLoading(false);
       })
-      .catch((error) => {
+      .catch(async (error) => {
         console.log('Error updating profile:', error);
+        await sendToast("error", "Error updating profile", 500);
         setLoading(false);
       });
   };
@@ -201,6 +205,8 @@ const ProfileScreen: React.FC = () => {
     auth
       .signOut()
       .then(() => {
+        localStorage["user"] = null;
+        localStorage["uid"] = null;
         router.push('/');
       })
       .catch((error) => {
