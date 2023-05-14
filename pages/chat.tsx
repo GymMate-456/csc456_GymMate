@@ -50,6 +50,7 @@ export default function Chat() {
       unsubscribe();
     };
   }, [router]);
+  
 
   //sender will always be set to currentuser
   useEffect(() => {
@@ -121,7 +122,7 @@ export default function Chat() {
   return (
     <div>
 
-      <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
+      <Header backButton="" leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
       <div className={styles.message_container}>
         <h2>Chats</h2>
       </div>  

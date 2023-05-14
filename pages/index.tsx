@@ -29,7 +29,7 @@ const data = [
     profileImgUrl:
       "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
     sports: ["Tennis", "Hiking", "Yoga"],
-    uid: "789ghi",
+    id: "789ghi",
     userID: "789ghi",
     username: "Peter",
     zipcode: "10001",
@@ -52,7 +52,7 @@ const data = [
     profileImgUrl:
       "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
     sports: ["Swimming", "Cycling", "Running"],
-    uid: "abc123",
+    id: "abc123",
     userID: "abc123",
     username: "Sara",
     zipcode: "10002",
