@@ -175,7 +175,11 @@ const GymMateCards: React.FC<Props> = ({ data }) => {
             <TinderCardWrapper
               className="swipe"
               key={person.email}
-              preventSwipe={["up", "down"]}
+              preventSwipe={
+                isLikingUser || isRequestInProgress
+                  ? ["up", "down", "left", "right"]
+                  : ["up", "down"]
+              }
               onSwipe={(dir) => swiped(dir, person.id)}
             >
               <div
