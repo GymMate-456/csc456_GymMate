@@ -27,7 +27,7 @@ interface Person {
 }
 
 interface Props {
-  data: Person[];
+  data: Person[] | null;
 }
 
 const GymMateCards: React.FC<Props> = ({ data }) => {
