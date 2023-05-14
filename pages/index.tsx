@@ -6,7 +6,7 @@ import styles from "../styles/Signin.module.css";
 import logo from "../public/icons/logo.png";
 import Image from "next/image";
 import Filter from "../utils/filter_component";
-import Header from "./Header";
+import Header from "./header";
 
 import GymMateCards from "./GymMateCard";
 
@@ -99,7 +99,7 @@ export default function Home() {
       listen();
     };
   }, []);
-  
+
   return (
     // If user is signed in, display the item(s) in the first fragment
     // If not, display item(s) in the second fragment block (sign in)
@@ -107,7 +107,7 @@ export default function Home() {
       {currentUser ? (
         <>
           <div>
-            <Header leftButton="profileIcon" rightButton="chatIcon" />
+            <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
           </div>
           <Filter currentUserId={currentUser.uid} onFilteredData= {handleFilteredData}></Filter>
           {/* Goes here */}

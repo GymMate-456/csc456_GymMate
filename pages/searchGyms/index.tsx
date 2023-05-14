@@ -1,5 +1,6 @@
 import { FormEvent, useState, useEffect } from "react";
 import GymCard from "../GymCard";
+import Header from "../header";
 
 function searchGyms() {
   const [gymData, setGymData] = useState([]);
@@ -44,6 +45,9 @@ function searchGyms() {
 
   return (
     <>
+
+      <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
+
       <h1>Enter Coordinates to search for gyms nearby! </h1>
 
       <form onSubmit={handleSubmit}>

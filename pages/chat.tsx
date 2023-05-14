@@ -3,14 +3,14 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import Link from "next/link";
 import styles from "../styles/Signin.module.css";
-import Header from "./Header";
+import Header from "./header";
 
 export default function Chat() {
 
   return (
     <div>
 
-      <Header leftButton="profileIcon" rightButton="chatIcon" />
+      <Header leftButton="profileIcon" logoButton="logoIcon" rightButton="searchIcon" rightButton2="chatIcon" />
 
       <h2>This is the chat page</h2>
 
