@@ -2,7 +2,7 @@ import { useState, FormEvent } from "react";
 import styles from "../styles/Signin.module.css";
 import Image from "next/image";
 import logo from "./../public/icons/logo.png";
-import { database } from "../utils/firebase";
+import { wizardOne } from "../utils/users"
 import { ToastDependency, sendToast } from "../utils/toasts"
 import { useRouter } from "next/router";
 
@@ -30,25 +30,9 @@ function Wizard1() {
     }
 
     // All checks passed - create the user account
-    database
-      .collection("users")
-      .doc(localStorage["uid"])
-      .update({
-        firstName: firstName,
-        lastName: lastName,
-        gender: gender,
-        age: age,
-      })
-      .then(await sendToast("success", "Account Initalization Part 1 Completed!", 500))
-      .then(() => {
-        router.push("/account_wizard_2");
-      })
-      .catch(async (error) => {
-        // error message to the user
-        await sendToast("error", "An error occurred while creating a new user.", 3000);
-        // Log the error to the console for debugging purposes
-        console.error("Failed process to save new user data.", error);
-      });
+    if (await wizardOne(firstName, lastName, gender, age)) {
+      router.push("/account_wizard_2");
+    }
   };
 
   return (

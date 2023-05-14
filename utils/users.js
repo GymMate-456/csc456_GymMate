@@ -104,4 +104,77 @@ const userFlag = async (uid) => {
   });
 }
 
-export { validateCredentials, signUp, signIn, userFlag };
+const wizardOne = async (firstName, lastName, gender, age) => {
+  return await database
+    .collection("users")
+    .doc(localStorage["uid"])
+    .update({
+      firstName: firstName,
+      lastName: lastName,
+      gender: gender,
+      age: age,
+    })
+    .then(await sendToast("success", "Account Initalization Part 1 Completed!", 120))
+    .then(() => {
+      return true;
+    })
+    .catch(async (error) => {
+      // error message to the user
+      await sendToast("error", "An error occurred while creating a new user.", 3000);
+      // Log the error to the console for debugging purposes
+      console.error("Failed process to save new user data.", error);
+      return false;
+    }
+  );
+}
+
+const wizardTwo = async (username, bio, sports, zipcode) => {
+  return await database
+    .collection("users")
+    .doc(localStorage["uid"])
+    .update({
+      username: username,
+      bio: bio,
+      sports: sports.map((s) => s.name),
+      zipcode: zipcode,
+    })
+    .then(await sendToast("success", "Account Initalization Part 2 Completed!", 120))
+    .then(() => {
+      return true;
+    })
+    .catch(async (error) => {
+      // error message to the user
+      await sendToast("error", "An error occurred while updating user data.", 3000);
+      // Log the error to the console for debugging purposes
+      console.error("Failed process to update user data.", error);
+      return false;
+    }
+  );
+}
+
+
+
+const wizardThree = async (cardImageUrl, profileImageUrl, setLoading) => {
+  return await database
+    .collection("users")
+    .doc(localStorage["uid"])
+    .update({
+      cardImgUrl: cardImageUrl,
+      profileImgUrl: profileImageUrl,
+      newUserFlag: false,
+      test: 2343,
+    })
+    .then(await sendToast("success", "Account Initalization Completed!", 120))
+    .then(() => {
+      setLoading(false);
+      return true;
+    })
+    .catch(async (error) => {
+      console.error("Failed process to save new user data.", error);
+      await sendToast("error", "An error occurred while creating a new user.", 3000);
+      return false;
+    }
+  );
+}
+
+export { validateCredentials, signUp, signIn, userFlag, wizardOne, wizardTwo, wizardThree };
