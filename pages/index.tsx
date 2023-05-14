@@ -99,8 +99,7 @@ export default function Home() {
       listen();
     };
   }, []);
-
-
+  
   return (
     // If user is signed in, display the item(s) in the first fragment
     // If not, display item(s) in the second fragment block (sign in)

@@ -1,10 +1,12 @@
 import { useState, FormEvent } from "react";
 import styles from "../../styles/Signin.module.css";
 import Image from "next/image";
-import { userFlag, signIn } from '../../utils/users'
+import { userFlag, signIn } from "../../utils/users"
 import Link from "next/link";
 import logo from "./../../public/icons/logo.png";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import { ToastDependency } from "../../utils/toasts"
+
 
 export default function Signin() {
   const [email, setEmail] = useState("");
@@ -60,6 +62,7 @@ export default function Signin() {
           <Link className={styles.new} href="/signup">New here? Join now</Link>
         </div>
       </div>
+      <ToastDependency />
     </div>
   );
 }

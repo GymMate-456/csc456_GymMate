@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import TinderCardWrapper from "./TinderCardWrapper";
+import firebase from "firebase/compat/app";
+import { database } from "../utils/firebase";
+import { debounce } from "lodash";
 
 interface Person {
   userID: string;
@@ -15,7 +18,7 @@ interface Person {
   };
   zipcode: string;
   email: string;
-  uid: string;
+  id: string;
   likes: string[];
   likesMe?: string[];
   matches?: string[];
@@ -24,34 +27,12 @@ interface Person {
 }
 
 interface Props {
-  data: Person[];
+  data: Person[] | null;
 }
 
 const GymMateCards: React.FC<Props> = ({ data }) => {
-  const [people, setPeople] = useState<Person[]>([]);
-  const [currentPerson, setCurrentPerson] = useState<Person>({
-    age: "21",
-    bio: "ovided an out-of-range value `null` for the select component. Consider providing a value that matches one of the available options or ''. The available values are `Male`, `Female`, `Other`. (",
-    cardImgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FcardImage?alt=media",
-    dislikes: [],
-    email: "hi@hi.com",
-    flagNewUser: false,
-    likes: [],
-    likesMe: [],
-    location: {
-      latitude: 40,
-      longitude: -73,
-    },
-    matches: [],
-    profileImgUrl:
-      "https://firebasestorage.googleapis.com/v0/b/athletelink-2b0c4.appspot.com/o/users%2FPugplc57FjN8k0XFn4GvhH0l0qG3%2FprofileImage?alt=media",
-    sports: ["Basketball", "Baseball", "Boxing", "Calisthenics"],
-    uid: "Pugplc57FjN8k0XFn4GvhH0l0qG3",
-    userID: "Pugplc57FjN8k0XFn4GvhH0l0qG3",
-    username: "Khuziama",
-    zipcode: "11010",
-  });
+  const [isLikingUser, setIsLikingUser] = useState(false);
+  const [isRequestInProgress, setRequestInProgress] = useState(false);
 
   const contentStyle: React.CSSProperties = {
     display: "flex",
@@ -84,15 +65,122 @@ const GymMateCards: React.FC<Props> = ({ data }) => {
     margin: "0",
   };
 
+  const likeUser = async (currentUserID: any, likedUserID: any) => {
+    if (isRequestInProgress) {
+      console.log("Request in progress. Skipping this request.");
+      return;
+    }
+    setRequestInProgress(true);
+    const sortedUserIDs = [currentUserID, likedUserID].sort((a, b) =>
+      a.localeCompare(b)
+    );
+
+    try {
+      const currentUserRef = database.collection("users").doc(currentUserID);
+      const currentUserDoc = await currentUserRef.get();
+      let currentUserLikes = currentUserDoc.data()?.likes;
+
+      // If the likes property does not exist, create it
+      if (!currentUserLikes) {
+        currentUserLikes = [];
+        await currentUserRef.update({ likes: [] });
+      }
+
+      // Check if the current user has not already liked the liked user
+      if (!currentUserLikes.includes(likedUserID)) {
+        await currentUserRef.update({
+          likes: firebase.firestore.FieldValue.arrayUnion(likedUserID),
+        });
+
+        const likedUserRef = database.collection("users").doc(likedUserID);
+        let likedUserDoc = await likedUserRef.get();
+        let likedUserLikes = likedUserDoc.data()?.likes;
+
+        // If the likesMe property does not exist, create it
+        if (!likedUserLikes) {
+          likedUserLikes = [];
+          await likedUserRef.update({ likesMe: [] });
+        }
+
+        await likedUserRef.update({
+          likesMe: firebase.firestore.FieldValue.arrayUnion(currentUserID),
+        });
+
+        // Check if the liked user also likes the current user
+        if (likedUserLikes?.includes(currentUserID)) {
+          const matchRef = database.collection("matches").doc();
+          const chatRef = database.collection("chats").doc(matchRef.id);
+
+          // Use a transaction to ensure atomic operations
+          await database.runTransaction(async (transaction) => {
+            // Check if the match already exists
+            const existingMatchDoc = await transaction.get(matchRef);
+
+            if (!existingMatchDoc.exists) {
+              // It's a match! Create a new match document
+              transaction.set(matchRef, {
+                user1: sortedUserIDs[0],
+                user2: sortedUserIDs[1],
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                messages: [],
+              });
+
+              // Create a chat document with the same ID as the match document
+              transaction.set(chatRef, {
+                user1: sortedUserIDs[0],
+                user2: sortedUserIDs[1],
+                messages: [],
+              });
+              console.log(
+                "Match found! Creating matchRef and chatRef in firebase..."
+              );
+            } else {
+              console.log(
+                "Match already exist. Not creating any ref in firebase."
+              );
+            }
+          });
+        } else {
+          console.log("User liked successfully!");
+        }
+      } else {
+        console.log("User has already liked this person!");
+      }
+    } catch (error) {
+      console.error("Error liking user:", error);
+    } finally {
+      setRequestInProgress(false);
+    }
+  };
+
+  const swiped = debounce(async (direction: any, person: any) => {
+    if (direction === "left") {
+      console.log("disliking user");
+      // const response = await dislikeUser(user, person);
+    } else if (direction === "right") {
+      if (isLikingUser) {
+        return; // Do not proceed if there's an ongoing likeUser request
+      }
+      setIsLikingUser(true);
+      const response = await likeUser(localStorage["uid"], person);
+      setIsLikingUser(false);
+    }
+  }, 1000);
+
   return (
-    <div className="gymMateCards" key={currentPerson.username}>
+    <div className="gymMateCards">
       <div className="gymMateCards__cardContainer">
         {data &&
           data.map((person) => (
             <TinderCardWrapper
               className="swipe"
-              key={person.username}
-              preventSwipe={["up", "down"]}
+              key={person.email}
+              preventSwipe={
+                isLikingUser || isRequestInProgress
+                  ? ["up", "down", "left", "right"]
+                  : ["up", "down"]
+              }
+              onSwipe={(dir) => swiped(dir, person.id)}
             >
               <div
                 style={

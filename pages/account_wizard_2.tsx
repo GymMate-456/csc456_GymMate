@@ -3,6 +3,7 @@ import styles from "../styles/Signin.module.css";
 import Image from "next/image";
 import logo from "./../public/icons/logo.png";
 import { database, geocollection } from "../utils/firebase";
+import { ToastDependency, sendToast } from "../utils/toasts"
 import { useRouter } from "next/router";
 import Multiselect from "multiselect-react-dropdown";
 import firebase from "firebase/compat/app";
@@ -14,21 +15,20 @@ function Wizard2() {
   const [sports, setSports] = useState<{ id: string; name: string }[]>([]);
   const [zipcode, setZipcode] = useState("");
   const router = useRouter();
-  const [location, setLocation] = useState<firebase.firestore.GeoPoint | null>(
-    null
-  );
-  const [successMessage, setSuccessMessage] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [location, setLocation] = useState<firebase.firestore.GeoPoint | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log(username, bio, sports);
     // Check that all required fields are filled out
     if (!username || !bio || sports.length === 0) {
-      alert("Please fill out all required fields.");
+      await sendToast("error", "Please fill out all required fields.", 3000);
       return;
     }
+    
+    // Location Handler
     await handleLocation();
+
     // All checks passed - update the user account
     database
       .collection("users")
@@ -39,64 +39,56 @@ function Wizard2() {
         sports: sports.map((s) => s.name),
         zipcode: zipcode,
       })
+      .then(await sendToast("success", "Account Initalization Part 2 Completed!", 500))
       .then(() => {
-        router.push("/account_wizard_3");
+        router.push("/account_wizard_3")
       })
-      .catch((error) => {
+      .catch(async (error) => {
         // error message to the user
-        alert("An error occurred while updating user data.");
+        await sendToast("error", "An error occurred while updating user data.", 3000);
         // Log the error to the console for debugging purposes
         console.error("Failed process to update user data.", error);
       });
   };
+
   const handleLocation = async () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setLocation(new firebase.firestore.GeoPoint(latitude, longitude));
-          setSuccessMessage("Location Received Successfully");
-          setErrorMessage("");
-          const geopoint = new firebase.firestore.GeoPoint(latitude, longitude);
-          geocollection
-            .doc(localStorage["uid"])
-            .update({
-              location: geopoint,
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        },
-        (error) => {
-          console.error(error);
-          setSuccessMessage("");
-          setErrorMessage("Cannot Get Location - Defaulting Location to NYC");
-          setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
-          const geopoint = new firebase.firestore.GeoPoint(40.7128, -74.006);
-          geocollection
-            .doc(localStorage["uid"])
-            .update({
-              location: geopoint,
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
-      );
+      navigator.geolocation.getCurrentPosition(async(position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation(new firebase.firestore.GeoPoint(latitude, longitude));
+        const geopoint = new firebase.firestore.GeoPoint(latitude, longitude);
+        await sendToast("success", "Location Received Successfully!", 500);
+        geocollection
+          .doc(localStorage["uid"])
+          .update({location: geopoint})
+          .catch(async (error) => {
+            console.error(error);
+            await sendToast("error", error.code, 3000);
+          });
+      }, async (error) => {
+        console.error(error);
+        await sendToast("warning", "Cannot Get Location - Defaulting Location to NYC", 2000);
+        setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
+        const geopoint = new firebase.firestore.GeoPoint(40.7128, -74.006);
+        geocollection
+          .doc(localStorage["uid"])
+          .update({location: geopoint})
+          .catch(async (error) => {
+            console.error(error);
+            await sendToast("error", error.message, 3000)
+          });
+      });
     } else {
       console.error("Geolocation is not supported by this browser");
-      setSuccessMessage("");
-      setErrorMessage("Cannot Get Location - Defaulting Location to NYC");
-      setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
+      await sendToast("warning", "Cannot Get Location - Defaulting Location to NYC", 2000);
       setLocation(new firebase.firestore.GeoPoint(40.7128, -74.006));
       const geopoint = new firebase.firestore.GeoPoint(40.7128, -74.006);
       geocollection
         .doc(localStorage["uid"])
-        .update({
-          location: geopoint,
-        })
-        .catch((error) => {
+        .update({location: geopoint})
+        .catch(async (error) => {
           console.error(error);
+          await sendToast("error", error.message, 3000)
         });
     }
   };
@@ -152,16 +144,13 @@ function Wizard2() {
             />
           </label>
           <br />
-
-          {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-          <br />
           <button className={styles.button} type="submit">
             Complete
           </button>
         </form>
         <br />
       </div>
+      <ToastDependency/>
     </div>
   );
 }
