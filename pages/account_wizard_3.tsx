@@ -2,7 +2,8 @@ import { useState, FormEvent } from "react";
 import styles from "../styles/Signin.module.css";
 import Image from "next/image";
 import logo from "./../public/icons/logo.png";
-import { database, storage } from "../utils/firebase";
+import { wizardThree } from "../utils/users"
+import { storage } from "../utils/firebase";
 import { ToastDependency, sendToast } from "../utils/toasts"
 import { useRouter } from "next/router";
 
@@ -95,24 +96,9 @@ function Wizard3() {
     if (cardImageUrl === "" || profileImageUrl === "") {
       await sendToast("error", "Please upload both images before continuing.", 3000);
     } else {
-      setLoading(true);
-      database
-        .collection("users")
-        .doc(localStorage["uid"])
-        .update({
-          cardImgUrl: cardImageUrl,
-          profileImgUrl: profileImageUrl,
-          newUserFlag: false,
-        })
-        .then(await sendToast("success", "Account Initalization Completed!", 500))
-        .then(() => {
-          setLoading(false);
-          router.push("/");
-        })
-        .catch(async (error) => {
-          console.error("Failed process to save new user data.", error);
-          await sendToast("error", "An error occurred while creating a new user.", 3000);
-        });
+      if (await wizardThree(cardImageUrl, profileImageUrl, setLoading)) {
+        router.push("/");
+      }
     }
   };
 
