@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 
 test('Header should render correctly', async ({ page }) => {
   // Navigate to the page where the Header component is rendered
-  await page.goto('http://localhost:3000'); 
+  await page.goto('http://localhost:3000');
 
   // Find the left button (Profile button)
   const leftButton = await page.waitForSelector('//header//a[contains(@href, "/profile")]/img[@alt="Profile Icon"]');
