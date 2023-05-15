@@ -2,6 +2,7 @@ import Head from "next/head";
 import "../styles/globals.css";
 import { AppProps } from "next/app";
 import "./GymMateCards.css";
+import "./chatId.css";
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
