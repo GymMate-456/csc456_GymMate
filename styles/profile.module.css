@@ -48,4 +48,13 @@
     margin-right: 5%;
     color: #573e6b;
   }
+
+  @media (max-width: 600px) {
+    .pictures {
+      flex-direction: column;
+      justify-content: center;
+      gap:1px
+    }
+
+  }
   

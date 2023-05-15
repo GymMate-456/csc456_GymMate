@@ -16,9 +16,9 @@ export default function Header({ leftButton, logoButton, rightButton, rightButto
         </Link>
       )}
       {logoButton && (
-      <Link href="/">
-        <Image className={styles.logo_button} src={logo2} alt="Logo" />
-      </Link>
+        <Link href="/">
+          <Image className={styles.logo_button} src={logo2} alt="Logo" />
+        </Link>
       )}
       {rightButton && (
         <Link href="/searchGyms">
@@ -31,9 +31,9 @@ export default function Header({ leftButton, logoButton, rightButton, rightButto
         </Link>
       )}
       {backButton && (
-          <Link href="/chat">
-            <ArrowBackIcon />
-          </Link>
+        <Link href="/chat">
+          <ArrowBackIcon />
+        </Link>
       )}
     </header>
   );
