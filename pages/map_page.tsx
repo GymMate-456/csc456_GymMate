@@ -11,8 +11,9 @@ const LocationAutocomplete = dynamic(() => import('../utils/LocationAutocomplete
 const MapPage: React.FC = () => {
   const [selectedPlace, setSelectedPlace] = useState<google.maps.places.PlaceResult | null>(null);
 
-  const handlePlaceSelect = (place: google.maps.places.PlaceResult) => {
-    setSelectedPlace(place);
+  const handlePlaceSelect = async(coordinates: any) => {
+    console.log('Selected coordinates:', coordinates.lat);
+    console.log('Selected coordinates:', coordinates.lng);
   };
 
   return (

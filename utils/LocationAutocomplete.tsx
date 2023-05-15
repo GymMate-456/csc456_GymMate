@@ -3,7 +3,7 @@ import { Autocomplete } from '@react-google-maps/api';
 import styles from '../styles/Signin.module.css';
 
 interface Props {
-  onSelect: (place: google.maps.places.PlaceResult) => void;
+  onSelect: (coordinates: { lat: number; lng: number }) => void;
 }
 
 const LocationAutocomplete: React.FC<Props> = ({ onSelect }) => {
@@ -16,8 +16,11 @@ const LocationAutocomplete: React.FC<Props> = ({ onSelect }) => {
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const place = autocomplete.getPlace();
-      onSelect(place);
-      console.log(place)
+      if (place.geometry && place.geometry.location) {
+        const { lat, lng } = place.geometry.location;
+        onSelect({ lat: lat(), lng: lng() });
+        console.log({ lat: lat(), lng: lng() });
+      }
     } else {
       console.log('Autocomplete is not loaded yet!');
     }
@@ -27,7 +30,7 @@ const LocationAutocomplete: React.FC<Props> = ({ onSelect }) => {
     <>
       {typeof google !== 'undefined' && (
         <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
-          <input className={styles.input}  type="text" placeholder=""/>
+          <input className={styles.input} type="text" placeholder="Enter Location..." />
         </Autocomplete>
       )}
     </>
@@ -35,3 +38,4 @@ const LocationAutocomplete: React.FC<Props> = ({ onSelect }) => {
 };
 
 export default LocationAutocomplete;
+

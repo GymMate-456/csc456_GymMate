@@ -114,7 +114,7 @@ const Filter: React.FC<FilterProps> = ({ currentUserId, onFilteredData}) => {
     <AppBar position="sticky" sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
       {isOpen ? (
       <Toolbar>
-        <Grid container alignItems="center" justifyContent="space-between" spacing={2}>
+        <Grid container alignItems="stretch" justifyContent="space-between" direction="column" spacing={3} style={{marginLeft:'32%', marginRight:'32%'}}>
           <Grid item xs={12} sm={5}>
             <label className={styles.label}>
             Sports Preference:
@@ -132,7 +132,7 @@ const Filter: React.FC<FilterProps> = ({ currentUserId, onFilteredData}) => {
                 searchBox: {
                   border: 'none'
                 },
-                color: 'black'
+                color: 'black',
               }}
             />
           </label>
