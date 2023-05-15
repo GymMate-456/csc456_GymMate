@@ -63,7 +63,7 @@ export default function Home() {
           </div>
           <Filter currentUserId={currentUser.uid} onFilteredData= {handleFilteredData}></Filter>
           {/* Goes here */}
-          <div style={{marginRight: "35%"}}>
+          <div className={styles.gym_card}>
             <GymMateCards data={filteredData} />
           </div>
         </>

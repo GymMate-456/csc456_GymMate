@@ -152,3 +152,30 @@
 .chat_button {
   margin-right: 50px;
 }
+
+.gym_card {
+  margin-right: 35%;
+}
+
+/* Add a media query for screens with a maximum width of 600px */
+@media screen and (max-width: 1150px) {
+  .header_icons {
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    justify-content: space-around; /* Distribute items evenly on each line */
+    padding: 8px; 
+    height: 10%;/* Add some padding to create spacing between icons */
+  }
+
+  .profile_button,
+  .logo_button,
+  .search_button,
+  .chat_button {
+    margin: 8px; /* Adjust margin for smaller spacing between icons */
+  }
+
+  .gym_card{
+    margin-right: 30%;
+    margin-left: -40%;
+    padding-right: 12%;
+  }
+}
